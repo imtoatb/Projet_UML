@@ -1,0 +1,3 @@
+class PremiumUser implements User{
+    
+}
