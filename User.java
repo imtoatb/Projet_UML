@@ -1,13 +1,20 @@
-
 public class User {
-    String name;
-    int userId;
+    private String name;
+    private int userId;
     boolean connected;
     
-    public User(String name, int useId){
+    public User(String name, int userId){
         this.name = name;
-        this.userId = useId;
+        this.userId = userId;
         this.connected = false;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getId(){
+        return this.userId;
     }
 
     public String register(String name, int userId){
@@ -31,8 +38,8 @@ public class User {
             return "A problem has occur, please reach the admin for more informations";
         }
         else{
-        connected = false;
-        return "You've been disconnected";
+            connected = false;
+            return "You've been disconnected";
         }
     }
 
@@ -43,9 +50,4 @@ public class User {
     public String pauseSong(Song song){
         return song.name + " has been paused at " + song.playingtime;
     }
-    
-
-
-
-    
 }
