@@ -29,7 +29,7 @@ public class User {
         }    
         else{
             connected = true;
-            return "You're now on your account";
+            return "You're now on your User account";
         }
     }
 

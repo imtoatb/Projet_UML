@@ -1,7 +1,17 @@
-class PremiumUser extends User{
-
+public class PremiumUser extends User {
     public PremiumUser(String name, int userId){
         super(name, userId);
+    }
+
+    @Override
+    public String logIn(){
+        if (connected == true){
+            return "You're already connected";
+        }    
+        else{
+            connected = true;
+            return "You're now on your Premium User account";
+        }
     }
 
     public String createPlaylist(String[] list){
