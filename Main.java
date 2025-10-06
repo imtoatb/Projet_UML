@@ -240,3 +240,5 @@ class Main {
         System.out.println("Duration: " + song.duration + " seconds");
     }
 }
+
+//test
