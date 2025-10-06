@@ -50,7 +50,7 @@ public class Admin {
 
 
 
-        //Faire une méthode qui permet de s'inscrire en insrivant une id et son nom(faire attention que l'id n'est pas déja pris)
+        //Faire une méthode qui permet de s'inscrire en insriant une id et son nom(faire attention que l'id n'est pas déja pris)
     }
 
     public boolean is_admin(int password){
@@ -92,7 +92,7 @@ public class Admin {
             this.connected = false;
         }
         else{
-            System.out.println("It's incorrect");
+            System.out.println("It's icorrect");
         }
 
 

@@ -80,6 +80,8 @@ class Main {
         } else if (accountType.equals("Admin")){
             Admin admin = new Admin(name, id);
             admin.register(name, id);
+            System.out.println("Welcome " + admin.getName() + ", here's your id : " + admin.getAdmin_id());
+
 
         }
         id++;
