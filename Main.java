@@ -52,7 +52,7 @@ class Main {
 
         switch (status.toLowerCase()) {
             case "admin":
-                System.out.println("Not available for the moment");
+                System.out.println("Admin");
                 break;
             case "user":
                 createUserAccount(name, "User");
@@ -72,11 +72,15 @@ class Main {
             user.register(name, id);
             allUser.addUser(name, id, "User");
             System.out.println("Welcome " + user.getName() + ", here's your id : " + user.getId());
-        } else {
+        } else if (accountType.equals("PremiumUser")){
             PremiumUser pUser = new PremiumUser(name, id);
             pUser.register(name, id);
             allUser.addUser(name, id, "PremiumUser");
             System.out.println("Welcome " + pUser.getName() + ", here's your id : " + pUser.getId());
+        } else if (accountType.equals("Admin")){
+            Admin admin = new Admin(name, id);
+            admin.register(name, id);
+
         }
         id++;
     }
