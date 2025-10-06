@@ -52,7 +52,7 @@ class Main {
 
         switch (status.toLowerCase()) {
             case "admin":
-                System.out.println("Not available for the moment");
+                System.out.println("Admin");
                 break;
             case "user":
                 createUserAccount(name, "User");
