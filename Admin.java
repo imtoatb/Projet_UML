@@ -92,7 +92,7 @@ public class Admin {
             this.connected = false;
         }
         else{
-            System.out.println("It's icorrect");
+            System.out.println("It's incorrect");
         }
 
 
@@ -124,7 +124,8 @@ public class Admin {
 
     }
 
-    public void addSongs(){
+    public String addSongs(Song song){
+        return "Le son " + song.name + " de " + song.artist +  "a été ajouté a l'application";
         //Ajouter un objet de type Song
     }
 
@@ -132,8 +133,8 @@ public class Admin {
         //Modifier l'un des attributs de l'objet
     }
 
-    public void deleteSongs(){
-        //Supprimer l'objet de type Song (Mettre tous les attributs de l'objet à 0
+    public String deleteSongs(Song song){
+        return "Le son " + song.name + " de " + song.artist +  "a été supprimé de l'application";
     }
 
 
