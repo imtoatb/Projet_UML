@@ -10,9 +10,8 @@ class Main {
         
         while (running) {
             displayMainMenu();
-            int choice = sc.nextInt();
-            sc.nextLine(); // vider le buffer après nextInt()
-
+            int choice = getIntInput("Enter your choice: ");
+            
             switch (choice) {
                 case 1:
                     registerUser();
@@ -21,77 +20,129 @@ class Main {
                     loginUser();
                     break;
                 case 3:
+                    displaySystemInfo();
+                    break;
+                case 4:
+                    showAdminNotice();
+                    break;
+                case 5:
                     running = false;
-                    System.out.println("Thank you for using MAHE Music!");
+                    System.out.println("Thank you for using MusicHub System!");
                     break;
                 default:
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
         sc.close();
     }
     
-    // Affiche le menu principal
     private static void displayMainMenu() {
-        System.out.println("************** Welcome on MAHE Music **************");
-        System.out.println("1. Register");
-        System.out.println("2. Log In");
-        System.out.println("3. Exit");
-        System.out.println("***************************************************");
-        System.out.print("Enter your choice: ");
+        System.out.println("\n========================================");
+        System.out.println("          WELCOME TO MUSICHUB");
+        System.out.println("========================================");
+        System.out.println("1. Register New Account");
+        System.out.println("2. Login to Existing Account");
+        System.out.println("3. System Information");
+        System.out.println("4. Administrator Access");
+        System.out.println("5. Exit System");
+        System.out.println("========================================");
     }
     
-    // Gère l'inscription d'un nouvel utilisateur
-    private static void registerUser() {
-        System.out.println("Create your account !");
-        System.out.print("Enter your name: ");
-        String name = sc.nextLine();
-
-        System.out.print("Who are you ? (Admin, User, PremiumUser): ");
-        String status = sc.nextLine();
-
-        switch (status.toLowerCase()) {
-            case "admin":
-                System.out.println("Admin");
-                break;
-            case "user":
-                createUserAccount(name, "User");
-                break;
-            case "premiumuser":
-                createUserAccount(name, "PremiumUser");
-                break;
-            default:
-                System.out.println("Invalid account type");
+    private static void showAdminNotice() {
+        System.out.println("\n========================================");
+        System.out.println("       ADMINISTRATOR ACCESS");
+        System.out.println("========================================");
+        System.out.println("⚠️  Administrator features are currently");
+        System.out.println("    under construction and development.");
+        System.out.println("");
+        System.out.println("Expected availability: Next system update");
+        System.out.println("Current status: Limited demo access only");
+        System.out.println("========================================");
+        
+        System.out.print("\nWould you like to view demo options? (yes/no): ");
+        String response = sc.nextLine().toLowerCase();
+        
+        if (response.equals("yes") || response.equals("y")) {
+            // Créer un admin temporaire pour la démo
+            Admin tempAdmin = new Admin("System Administrator", 9999);
+            AdminMainMenu.displayAdminMenu(tempAdmin, sc);
+        } else {
+            System.out.println("Returning to main menu...");
         }
     }
     
-    // Crée un compte utilisateur
+    private static void displaySystemInfo() {
+        System.out.println("\nSYSTEM INFORMATION");
+        System.out.println("Total Songs in Library: " + MusicDatabase.getTotalSongs());
+        System.out.println("Total Artists: " + MusicDatabase.getTotalArtists());
+        System.out.println("Registered Users: " + allUser.getUsers().size());
+        System.out.println("Admin System: Under Construction");
+    }
+    
+    private static void registerUser() {
+        System.out.println("\nACCOUNT REGISTRATION");
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine().trim();
+        
+        if (name.isEmpty()) {
+            System.out.println("Error: Name cannot be empty.");
+            return;
+        }
+        
+        System.out.println("\nSelect account type:");
+        System.out.println("1. Regular User");
+        System.out.println("2. Premium User");
+        System.out.println("3. Administrator (Limited Access)");
+        
+        int typeChoice = getIntInput("Choose account type (1-3): ");
+        
+        switch (typeChoice) {
+            case 1:
+                createUserAccount(name, "User");
+                break;
+            case 2:
+                createUserAccount(name, "PremiumUser");
+                break;
+            case 3:
+                createLimitedAdminAccount(name);
+                break;
+            default:
+                System.out.println("Invalid account type selection.");
+        }
+    }
+    
+    private static void createLimitedAdminAccount(String name) {
+        System.out.println("\nADMINISTRATOR REGISTRATION NOTICE");
+        System.out.println("Full administrator registration is currently disabled.");
+        System.out.println("Your account will be created as a regular user.");
+        System.out.println("Admin features will be available in the next update.");
+        
+        // Créer un compte utilisateur normal à la place
+        createUserAccount(name, "User");
+    }
+    
     private static void createUserAccount(String name, String accountType) {
         if (accountType.equals("User")) {
             User user = new User(name, id);
-            user.register(name, id);
             allUser.addUser(name, id, "User");
-            System.out.println("Welcome " + user.getName() + ", here's your id : " + user.getId());
-        } else {
+            System.out.println("Welcome " + user.getName() + "! Your User ID: " + user.getId());
+        } else if (accountType.equals("PremiumUser")) {
             PremiumUser pUser = new PremiumUser(name, id);
-            pUser.register(name, id);
             allUser.addUser(name, id, "PremiumUser");
-            System.out.println("Welcome " + pUser.getName() + ", here's your id : " + pUser.getId());
+            System.out.println("Welcome Premium User " + pUser.getName() + "! Your User ID: " + pUser.getId());
         }
         id++;
     }
     
-    // Gère la connexion d'un utilisateur
     private static void loginUser() {
-        System.out.print("What's your name ? ");
-        String loginName = sc.nextLine();
-        System.out.print("What's your id ? ");
-        int loginId = sc.nextInt();
-        sc.nextLine(); // vider le buffer après nextInt()
+        System.out.println("\nUSER LOGIN");
+        System.out.print("Enter your name: ");
+        String loginName = sc.nextLine().trim();
+        int loginId = getIntInput("Enter your ID: ");
         
         boolean found = false;
         for (AllUser.UserInfo userInfo : allUser.getUsers()) {
-            if (userInfo.getName().equals(loginName) && userInfo.getId() == loginId) {
+            if (userInfo.getName().equalsIgnoreCase(loginName) && userInfo.getId() == loginId) {
                 found = true;
                 handleUserLogin(userInfo);
                 break;
@@ -99,145 +150,49 @@ class Main {
         }
         
         if (!found) {
-            System.out.println("No account found with this name and id.");
+            System.out.println("Error: No account found with these credentials.");
         }
     }
     
-    // Gère la connexion selon le type de compte
     private static void handleUserLogin(AllUser.UserInfo userInfo) {
         switch (userInfo.getAccountType()) {
             case "User":
                 User user = new User(userInfo.getName(), userInfo.getId());
                 System.out.println(user.logIn());
-                userMenu(user);
+                UserMainMenu.displayUserMenu(user, sc);
                 break;
             case "PremiumUser":
                 PremiumUser pUser = new PremiumUser(userInfo.getName(), userInfo.getId());
                 System.out.println(pUser.logIn());
-                premiumUserMenu(pUser);
+                PremiumUserMainMenu.displayPremiumUserMenu(pUser, sc);
                 break;
             case "Admin":
-                System.out.println("Admin login not available yet.");
+                handleAdminLogin(userInfo);
                 break;
             default:
-                System.out.println("Something went wrong");
+                System.out.println("Error: Unknown account type.");
         }
     }
     
-    // Menu pour les utilisateurs normaux
-    private static void userMenu(User user) {
-        boolean inUserMenu = true;
-        
-        while (inUserMenu) {
-            System.out.println("\n********** User Menu **********");
-            System.out.println("1. Play Song");
-            System.out.println("2. Pause Song");
-            System.out.println("3. Log Out");
-            System.out.println("********************************");
-            System.out.print("Enter your choice: ");
-            
-            int choice = sc.nextInt();
-            sc.nextLine();
-            
-            switch (choice) {
-                case 1:
-                    Song song = new Song("Bohemian Rhapsody", "Queen", 354, 0);
-                    System.out.println(user.playSong(song));
-                    break;
-                case 2:
-                    Song song2 = new Song("Bohemian Rhapsody", "Queen", 354, 120);
-                    System.out.println(user.pauseSong(song2));
-                    break;
-                case 3:
-                    System.out.println(user.logOut());
-                    inUserMenu = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice");
+    private static void handleAdminLogin(AllUser.UserInfo userInfo) {
+        System.out.println("\nADMINISTRATOR LOGIN NOTICE");
+        System.out.println("Full administrator login is currently disabled.");
+        System.out.println("Please use the demo access from the main menu.");
+        System.out.println("Your admin account: " + userInfo.getName() + " (ID: " + userInfo.getId() + ")");
+        System.out.println("Full access will be available in the next update.");
+    }
+    
+    private static int getIntInput(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                int input = sc.nextInt();
+                sc.nextLine();
+                return input;
+            } catch (Exception e) {
+                System.out.println("Error: Please enter a valid number.");
+                sc.nextLine();
             }
         }
-    }
-    
-    private static void premiumUserMenu(PremiumUser pUser) {
-        boolean inPremiumMenu = true;
-        Playlist playlist = null;
-        
-        while (inPremiumMenu) {
-            System.out.println("\n********** Premium User Menu **********");
-            System.out.println("1. Play Song");
-            System.out.println("2. Pause Song");
-            System.out.println("3. Create Playlist");
-            System.out.println("4. Add Song to Playlist");
-            System.out.println("5. Remove Song from Playlist");
-            System.out.println("6. Play Playlist");
-            System.out.println("7. Download Song");
-            System.out.println("8. Log Out");
-            System.out.println("***************************************");
-            System.out.print("Enter your choice: ");
-            
-            int choice = sc.nextInt();
-            sc.nextLine();
-            
-            switch (choice) {
-                case 1:
-                    Song song = new Song("Blinding Lights", "The Weeknd", 200, 0);
-                    System.out.println(pUser.playSong(song));
-                    break;
-                case 2:
-                    Song song2 = new Song("Blinding Lights", "The Weeknd", 200, 75);
-                    System.out.println(pUser.pauseSong(song2));
-                    break;
-                case 3:
-                    String[] initialList = {"Dance Monkey", "Bad Guy", "Levitating"};
-                    System.out.println(pUser.createPlaylist(initialList));
-                    playlist = new Playlist();
-                    playlist.list = initialList;
-                    System.out.println("Playlist created with " + initialList.length + " songs");
-                    break;
-                case 4:
-                    if (playlist != null) {
-                        Song newSong = new Song("Shape of You", "Ed Sheeran", 234, 0);
-                        System.out.println(pUser.addToPlaylist(newSong, playlist));
-                        System.out.println("Playlist now has " + playlist.list.length + " songs");
-                    } else {
-                        System.out.println("Please create a playlist first (option 3)");
-                    }
-                    break;
-                case 5:
-                    if (playlist != null && playlist.list.length > 0) {
-                        Song songToRemove = new Song("Bad Guy", "Billie Eilish", 194, 0);
-                        System.out.println(pUser.removeFromPlaylist(songToRemove, playlist));
-                        System.out.println("Playlist now has " + playlist.list.length + " songs");
-                    } else {
-                        System.out.println("No playlist or playlist is empty");
-                    }
-                    break;
-                case 6:
-                    if (playlist != null && playlist.list.length > 0) {
-                        System.out.println(pUser.playPlaylist(playlist));
-                    } else {
-                        System.out.println("No playlist available or playlist is empty");
-                    }
-                    break;
-                case 7:
-                    Song downloadSong = new Song("Save Your Tears", "The Weeknd", 215, 0);
-                    System.out.println(pUser.downloadSong(downloadSong));
-                    break;
-                case 8:
-                    System.out.println(pUser.logOut());
-                    inPremiumMenu = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-            }
-        }
-    }
-    
-    // Méthode utilitaire pour afficher les détails d'une chanson
-    private static void displaySongInfo(Song song) {
-        System.out.println("Now playing: " + song.name + " by " + song.artist);
-        System.out.println("Duration: " + song.duration + " seconds");
     }
 }
-
-//test
