@@ -158,7 +158,6 @@ class Main {
         }
     }
     
-    // Menu pour les utilisateurs premium
     private static void premiumUserMenu(PremiumUser pUser) {
         boolean inPremiumMenu = true;
         Playlist playlist = null;
