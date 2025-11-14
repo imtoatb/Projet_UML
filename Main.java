@@ -52,7 +52,7 @@ class Main {
         System.out.println("\n========================================");
         System.out.println("       ADMINISTRATOR ACCESS");
         System.out.println("========================================");
-        System.out.println("⚠️  Administrator features are currently");
+        System.out.println("   Administrator features are currently");
         System.out.println("    under construction and development.");
         System.out.println("");
         System.out.println("Expected availability: Next system update");

@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.Scanner;
 
+
 public class PremiumUserMainMenu {
     
     public static void displayPremiumUserMenu(PremiumUser pUser, Scanner sc) {
