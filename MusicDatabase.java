@@ -7,7 +7,7 @@ public class MusicDatabase {
     private static List<Playlist> allPlaylists = new ArrayList<>();
     
     static {
-        initializeSongs();
+        initializeSongs(); //To initialize all the static method
     }
     
     private static void initializeSongs() {
@@ -25,10 +25,12 @@ public class MusicDatabase {
         allSongs.add(new Song("Kill Bill", "SZA", 153, 0));
     }
     
+
     public static List<Song> getAllSongs() {
         return new ArrayList<>(allSongs);
     }
     
+
     public static Song findSongByName(String name) {
         for (Song song : allSongs) {
             if (song.name.equalsIgnoreCase(name)) {
@@ -38,6 +40,7 @@ public class MusicDatabase {
         return null;
     }
     
+
     public static List<Song> findSongsByArtist(String artist) {
         List<Song> result = new ArrayList<>();
         for (Song song : allSongs) {
@@ -73,8 +76,9 @@ public class MusicDatabase {
     public static List<Song> searchSongs(String query) {
         List<Song> results = new ArrayList<>();
         for (Song song : allSongs) {
-            if (song.name.toLowerCase().contains(query.toLowerCase()) || 
-                song.artist.toLowerCase().contains(query.toLowerCase())) {
+
+            if (song.name.toLowerCase().contains(query.toLowerCase()) || song.artist.toLowerCase().contains(query.toLowerCase())) {
+
                 results.add(song);
             }
         }
@@ -83,27 +87,35 @@ public class MusicDatabase {
     
     public static List<Playlist> getUserPlaylists(int userId) {
         List<Playlist> userPlaylists = new ArrayList<>();
+
         for (Playlist playlist : allPlaylists) {
+
             if (playlist.getUserId() == userId) {
                 userPlaylists.add(playlist);
             }
         }
+
         return userPlaylists;
     }
     
     public static Playlist getPlaylistByName(String name, int userId) {
+
         for (Playlist playlist : allPlaylists) {
+
             if (playlist.getName().equalsIgnoreCase(name) && playlist.getUserId() == userId) {
                 return playlist;
             }
         }
+        
         return null;
     }
     
     public static boolean deletePlaylist(String name, int userId) {
         for (int i = 0; i < allPlaylists.size(); i++) {
+            
             Playlist playlist = allPlaylists.get(i);
             if (playlist.getName().equalsIgnoreCase(name) && playlist.getUserId() == userId) {
+                
                 allPlaylists.remove(i);
                 return true;
             }
@@ -120,34 +132,39 @@ public class MusicDatabase {
         List<Song> allSongs = getAllSongs();
         
         if (allSongs.isEmpty()) {
-            System.out.println("No songs available in the library.");
+            System.out.println("No songs available in the library");
             return null;
         }
         
         System.out.println("\nAVAILABLE SONGS:");
         System.out.println("=================");
         for (int i = 0; i < allSongs.size(); i++) {
+
             Song song = allSongs.get(i);
-            System.out.printf("%2d. %-25s - %-20s (%.0fs)\n", 
-                i + 1, song.name, song.artist, song.duration);
+            System.out.printf("%2d. %-25s - %-20s (%.0fs)\n", i + 1, song.name, song.artist, song.duration);
         }
         
+
+
         System.out.print("Select a song (1-" + allSongs.size() + "): ");
         try {
             int choice = sc.nextInt();
-            sc.nextLine(); // vider le buffer
+            sc.nextLine(); //for the buffer
             
             if (choice >= 1 && choice <= allSongs.size()) {
                 Song selectedSong = allSongs.get(choice - 1);
-                System.out.println("Selected: " + selectedSong.name + " - " + selectedSong.artist);
+                System.out.println("Selected : " + selectedSong.name + " - " + selectedSong.artist);
                 return selectedSong;
             } else {
-                System.out.println("Invalid selection. Please try again.");
+                System.out.println("Invalid selection. Please try again");
                 return null;
             }
-        } catch (Exception e) {
-            System.out.println("Invalid input. Please enter a number.");
-            sc.nextLine(); // vider le buffer
+
+        } 
+        
+        catch (Exception e) {
+            System.out.println("Invalid input, Please enter a number");
+            sc.nextLine(); 
             return null;
         }
     }

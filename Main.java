@@ -1,6 +1,6 @@
-import java.util.Scanner;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 class Main {
     private static int id = 0;
@@ -20,19 +20,24 @@ class Main {
                 case 1:
                     registerUser();
                     break;
+
                 case 2:
                     loginUser();
                     break;
+
                 case 3:
                     displaySystemInfo();
                     break;
+
                 case 4:
                     showAdminNotice();
                     break;
+
                 case 5:
                     running = false;
                     System.out.println("Thank you for using MusicHub System!");
                     break;
+
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
@@ -85,6 +90,7 @@ class Main {
         System.out.println("Registered Users: " + allUser.getUsers().size());
         System.out.println("Admin System: Under Construction");
     }
+
     
     private static void registerUser() {
         System.out.println("\nACCOUNT REGISTRATION");
@@ -100,8 +106,10 @@ class Main {
         System.out.println("1. Regular User");
         System.out.println("2. Premium User");
         System.out.println("3. Administrator (Limited Access)");
-        
+
         int typeChoice = getIntInput("Choose account type (1-3): ");
+
+
 
         switch (typeChoice) {
             case 1:
@@ -118,6 +126,7 @@ class Main {
         }
     }
 
+
     private static void createAdminAccount(String name) {
         allUser.addUser(name, id, "Admin");
         System.out.println("Admin account created for " + name + " (ID: " + id + ")");
@@ -130,7 +139,9 @@ class Main {
             User user = new User(name, id);
             allUser.addUser(name, id, "User");
             System.out.println("Welcome " + user.getName() + "! Your User ID: " + user.getId());
-        } else if (accountType.equals("PremiumUser")) {
+        } 
+        
+        else if (accountType.equals("PremiumUser")) {
             PremiumUser pUser = new PremiumUser(name, id);
             allUser.addUser(name, id, "PremiumUser");
             System.out.println("Welcome Premium User " + pUser.getName() + "! Your User ID: " + pUser.getId());
@@ -154,22 +165,25 @@ class Main {
         }
         
         if (!found) {
-            System.out.println("Error: No account found with these credentials.");
+            System.out.println("Error: No account found");
         }
     }
     
     private static void handleUserLogin(AllUser.UserInfo userInfo) {
         switch (userInfo.getAccountType()) {
+
             case "User":
                 User user = new User(userInfo.getName(), userInfo.getId());
                 System.out.println(user.logIn());
                 UserMainMenu.displayUserMenu(user, sc);
                 break;
+
             case "PremiumUser":
                 PremiumUser pUser = new PremiumUser(userInfo.getName(), userInfo.getId());
                 System.out.println(pUser.logIn());
                 PremiumUserMainMenu.displayPremiumUserMenu(pUser, sc);
                 break;
+
             case "Admin":
                 handleAdminLogin(userInfo);
                 break;
@@ -180,22 +194,28 @@ class Main {
     
     private static void handleAdminLogin(AllUser.UserInfo userInfo) {
         Admin admin = Admin.createAccount(userInfo.getName(), userInfo.getId());
+        
         if (admin.login(userInfo.getId())) {
             System.out.println("Welcome, Admin " + admin.getName() + "!");
             AdminMainMenu.displayAdminMenu(admin, sc, allUser, songCatalog); // pass registry + catalog
-        } else {
+        } 
+        
+        else {
             System.out.println("Invalid admin id.");
         }
     }
     
     private static int getIntInput(String prompt) {
         while (true) {
+            
             try {
                 System.out.print(prompt);
                 int input = sc.nextInt();
                 sc.nextLine();
                 return input;
-            } catch (Exception e) {
+            } 
+            
+            catch (Exception e) {
                 System.out.println("Error: Please enter a valid number.");
                 sc.nextLine();
             }

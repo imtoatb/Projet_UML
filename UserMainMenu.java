@@ -23,6 +23,7 @@ public class UserMainMenu {
             System.out.println("7. Search Songs");
             System.out.println("8. Volume Controls");
             System.out.println("9. Log Out");
+            System.out.println("  10. Delete account");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
@@ -32,42 +33,68 @@ public class UserMainMenu {
             String result = "";
             
             switch (choice) {
+
                 case 1:
                     currentSong = playSelectedSong(user, sc, allSongs);
                     result = "Song selected";
                     break;
+
                 case 2:
+
                     if (currentSong != null) {
                         result = user.pauseSong(currentSong);
-                    } else {
+                    } 
+                    else {
                         result = "No song is currently playing. Please play a song first.";
                     }
                     break;
+
                 case 3:
                     result = user.nextSong();
                     break;
+
                 case 4:
+
                     result = user.previousSong();
                     break;
+
                 case 5:
                     result = user.getCurrentSong();
                     break;
+
                 case 6:
                     browseAllSongs();
                     result = "Songs displayed";
                     break;
+
                 case 7:
                     searchSongs(sc);
                     result = "Search completed";
                     break;
+
                 case 8:
                     handleVolumeControls(user, sc);
                     result = "Volume adjusted";
                     break;
+
                 case 9:
                     result = user.logOut();
                     inUserMenu = false;
                     break;
+
+                
+                case 10: 
+                    System.out.print("Are you sure you want to delete your account? This action cannot be undone. (YES): ");
+                    String confirmation = sc.nextLine().toLowerCase();
+                    if (confirmation.equals("YES") || confirmation.equals("y")) {
+                        result = user.deleteAccount();
+                        inUserMenu = false;
+                    } 
+                    else {
+                        result = "Account deletion cancelled.";
+                    }
+                    break;
+
                 default:
                     result = "Invalid choice. Please try again.";
             }
@@ -122,12 +149,14 @@ public class UserMainMenu {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
             int songIndex = -1;
+
             for (int i = 0; i < allSongs.size(); i++) {
                 if (allSongs.get(i).name.equals(selectedSong.name)) {
                     songIndex = i;
                     break;
                 }
             }
+
             if (songIndex != -1) {
                 user.resetSongIndex(songIndex);
             }
@@ -148,6 +177,7 @@ public class UserMainMenu {
                 i + 1, song.name, song.artist, song.duration);
         }
         
+
         System.out.println("\nTotal songs: " + allSongs.size());
     }
     
@@ -155,13 +185,17 @@ public class UserMainMenu {
         System.out.print("Enter song name or artist to search: ");
         String query = sc.nextLine();
         
+
         List<Song> results = MusicDatabase.searchSongs(query);
         
+
         if (results.isEmpty()) {
             System.out.println("No songs found matching: " + query);
-        } else {
+        } 
+        else {
             System.out.println("\nSEARCH RESULTS for '" + query + "':");
             System.out.println("=========================");
+            
             for (int i = 0; i < results.size(); i++) {
                 Song song = results.get(i);
                 System.out.printf("%2d. %-25s - %-20s (%.0fs)\n", 

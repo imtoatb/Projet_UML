@@ -40,9 +40,11 @@ public class PremiumUser extends User {
 
     public String removeFromPlaylist(Song song, Playlist playlist){
         boolean removed = playlist.removeSong(song.name);
+        
         if (removed) {
             return "'" + song.name + "' removed from playlist '" + playlist.getName() + "'";
-        } else {
+        } 
+        else {
             return "Song not found in playlist '" + playlist.getName() + "'";
         }
     }
@@ -56,7 +58,8 @@ public class PremiumUser extends User {
         boolean deleted = MusicDatabase.deletePlaylist(playlistName, this.getId());
         if (deleted) {
             return "Playlist '" + playlistName + "' has been deleted";
-        } else {
+        } 
+        else {
             return "Playlist '" + playlistName + "' not found";
         }
     }
@@ -88,7 +91,9 @@ public class PremiumUser extends User {
             setCurrentSongList(shuffledPlaylist);
             resetSongIndex(0);
             return "Shuffle mode activated! Playlist has been shuffled.";
-        } else {
+        } 
+        
+        else {
             shuffleMode = false;
             shuffledPlaylist = null;
             setCurrentSongList(songList);
@@ -105,10 +110,12 @@ public class PremiumUser extends User {
             currentSongIndex = (currentSongIndex + 1) % shuffledPlaylist.size();
             Song nextSong = shuffledPlaylist.get(currentSongIndex);
             return "SHUFFLE - Next: " + nextSong.name + " - " + nextSong.artist + " is now playing";
-        } else {
+        } 
+        else {
             return super.nextSong();
         }
     }
+
     
     @Override
     public String previousSong() {
@@ -116,17 +123,22 @@ public class PremiumUser extends User {
             currentSongIndex = (currentSongIndex - 1 + shuffledPlaylist.size()) % shuffledPlaylist.size();
             Song previousSong = shuffledPlaylist.get(currentSongIndex);
             return "SHUFFLE - Previous: " + previousSong.name + " - " + previousSong.artist + " is now playing";
-        } else {
+        } 
+        else {
             return super.previousSong();
         }
     }
     
+
     @Override
     public String getCurrentSong() {
         if (shuffleMode && shuffledPlaylist != null) {
+
             Song currentSong = shuffledPlaylist.get(currentSongIndex);
             return "SHUFFLE - Now Playing: " + currentSong.name + " - " + currentSong.artist + " (" + currentSong.duration + "s)";
-        } else {
+        
+        } 
+        else {
             return super.getCurrentSong();
         }
     }
@@ -144,12 +156,14 @@ public class PremiumUser extends User {
             return "Playlist is empty. Cannot shuffle.";
         }
         
+
         List<Song> playlistSongs = new java.util.ArrayList<>();
         String[] songNames = playlist.getSongs();
         
         for (String songName : songNames) {
             Song song = MusicDatabase.findSongByName(songName);
             if (song != null) {
+
                 playlistSongs.add(song);
             }
         }
@@ -165,5 +179,33 @@ public class PremiumUser extends User {
         resetSongIndex(0);
         
         return "Playlist '" + playlist.getName() + "' shuffled! " + playlistSongs.size() + " songs in random order.";
+    }
+
+
+
+    //To delete the account
+    @Override
+    public String deleteAccount() {
+        if (!isAccountActive()) {
+            return "This account has already been deleted.";
+        }
+
+        if (connected) {
+            connected = false;
+        }
+        
+ 
+        List<Playlist> userPlaylists = getMyPlaylists();
+        for (Playlist playlist : userPlaylists) {
+            MusicDatabase.deletePlaylist(playlist.getName(), this.getId());
+        }
+
+        this.name = "Deleted Premium User";
+        this.currentSongList = null;
+        this.currentSongIndex = 0;
+        this.volume = 50;
+        this.accountActive = false;
+        
+        return "Your Premium account has been successfully deleted. All your data and playlists have been removed.";
     }
 }

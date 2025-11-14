@@ -15,6 +15,7 @@ public class PremiumUserMainMenu {
             System.out.println("\n========================================");
             System.out.println("          PREMIUM USER MENU");
             System.out.println("========================================");
+
             System.out.println("Music Controls:");
             System.out.println("  1. Play Song");
             System.out.println("  2. Pause Song");
@@ -24,6 +25,7 @@ public class PremiumUserMainMenu {
             System.out.println("  6. Toggle Shuffle Mode");
             System.out.println("  7. Browse All Songs");
             System.out.println("  8. Search Songs");
+
             System.out.println("Playlist Management:");
             System.out.println("  9. Create Playlist");
             System.out.println("  10. Add Song to Playlist");
@@ -31,11 +33,14 @@ public class PremiumUserMainMenu {
             System.out.println("  12. Play Playlist");
             System.out.println("  13. Shuffle Playlist");
             System.out.println("  14. View My Playlists");
+
             System.out.println("Premium Features:");
             System.out.println("  15. Download Song");
             System.out.println("  16. Volume Controls");
             System.out.println("  17. Log Out");
+            System.out.println("  18. Delete account");
             System.out.println("========================================");
+
             System.out.print("Enter your choice: ");
             
             int choice = sc.nextInt();
@@ -44,77 +49,115 @@ public class PremiumUserMainMenu {
             String result = "";
             
             switch (choice) {
+
+
                 case 1:
                     currentSong = playSelectedSong(pUser, sc, allSongs);
+                    
                     if (currentSong != null) {
                         result = pUser.playSong(currentSong);
-                    } else {
+                    } e
+                    lse {
                         result = "No song selected.";
                     }
                     break;
+
                 case 2:
                     if (currentSong != null) {
                         result = pUser.pauseSong(currentSong);
-                    } else {
+                    } 
+                    else {
                         result = "No song is currently playing. Please play a song first.";
                     }
                     break;
+
                 case 3:
                     result = pUser.nextSong();
                     break;
+
                 case 4:
                     result = pUser.previousSong();
                     break;
+
                 case 5:
                     result = pUser.getCurrentSong();
                     break;
+
                 case 6:
                     result = pUser.toggleShuffle(allSongs);
                     break;
+
                 case 7:
                     result = browseAllSongs();
                     break;
+
                 case 8:
                     result = searchSongs(sc);
                     break;
+
                 case 9:
                     currentPlaylist = createPlaylist(pUser, sc);
                     result = "Playlist '" + currentPlaylist.getName() + "' created successfully!";
                     break;
+
                 case 10:
                     result = addSongToPlaylist(pUser, currentPlaylist, sc);
                     break;
+
                 case 11:
                     result = removeSongFromPlaylist(pUser, currentPlaylist, sc);
                     break;
+
                 case 12:
                     if (currentPlaylist != null) {
                         result = pUser.playPlaylist(currentPlaylist);
-                    } else {
+                    } 
+                    else {
                         result = "No playlist available. Please create one first.";
                     }
                     break;
+
                 case 13:
+
                     if (currentPlaylist != null) {
                         result = pUser.shufflePlaylist(currentPlaylist);
-                    } else {
+                    } 
+                    else {
                         result = "No playlist available. Please create one first.";
                     }
                     break;
+
                 case 14:
                     result = viewUserPlaylists(pUser);
                     break;
+
                 case 15:
                     result = downloadSelectedSong(pUser, sc);
                     break;
+
                 case 16:
                     handleVolumeControls(pUser, sc);
                     result = "Volume controls closed";
                     break;
+
                 case 17:
                     result = pUser.logOut();
                     inPremiumMenu = false;
                     break;
+
+                case 18: 
+                    System.out.print("Are you sure you want to delete your account? This action cannot be undone. (YES): ");
+                    String confirmation = sc.nextLine().toLowerCase();
+                    if (confirmation.equals("YES") || confirmation.equals("y")) {
+                        result = user.deleteAccount();
+                        inUserMenu = false;
+                    } 
+                    else {
+                        result = "Account deletion cancelled.";
+                    }
+
+                    break;
+
                 default:
                     result = "Invalid choice. Please try again.";
             }
