@@ -1,17 +1,21 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
 class Main {
     private static int id = 0;
     private static AllUser allUser = new AllUser();
     private static Scanner sc = new Scanner(System.in);
-    
+    private static List<Song> songCatalog = new ArrayList<>();
+
+
     public static void main(String[] args) {
         boolean running = true;
         
         while (running) {
             displayMainMenu();
             int choice = getIntInput("Enter your choice: ");
-            
+
             switch (choice) {
                 case 1:
                     registerUser();
@@ -58,14 +62,17 @@ class Main {
         System.out.println("Expected availability: Next system update");
         System.out.println("Current status: Limited demo access only");
         System.out.println("========================================");
-        
+
         System.out.print("\nWould you like to view demo options? (yes/no): ");
-        String response = sc.nextLine().toLowerCase();
-        
+        String response = sc.nextLine().trim().toLowerCase();
+
         if (response.equals("yes") || response.equals("y")) {
-            // Créer un admin temporaire pour la démo
-            Admin tempAdmin = new Admin("System Administrator", 9999);
-            AdminMainMenu.displayAdminMenu(tempAdmin, sc);
+            // Create a temporary admin for the demo
+            Admin tempAdmin = Admin.createAccount("System Administrator", 9999);
+            tempAdmin.login(9999); // mark as connected
+
+
+            AdminMainMenu.displayAdminMenu(tempAdmin, sc, allUser, songCatalog);
         } else {
             System.out.println("Returning to main menu...");
         }
@@ -95,7 +102,7 @@ class Main {
         System.out.println("3. Administrator (Limited Access)");
         
         int typeChoice = getIntInput("Choose account type (1-3): ");
-        
+
         switch (typeChoice) {
             case 1:
                 createUserAccount(name, "User");
@@ -104,23 +111,20 @@ class Main {
                 createUserAccount(name, "PremiumUser");
                 break;
             case 3:
-                createLimitedAdminAccount(name);
+                createAdminAccount(name);
                 break;
             default:
                 System.out.println("Invalid account type selection.");
         }
     }
-    
-    private static void createLimitedAdminAccount(String name) {
-        System.out.println("\nADMINISTRATOR REGISTRATION NOTICE");
-        System.out.println("Full administrator registration is currently disabled.");
-        System.out.println("Your account will be created as a regular user.");
-        System.out.println("Admin features will be available in the next update.");
-        
-        // Créer un compte utilisateur normal à la place
-        createUserAccount(name, "User");
+
+    private static void createAdminAccount(String name) {
+        allUser.addUser(name, id, "Admin");
+        System.out.println("Admin account created for " + name + " (ID: " + id + ")");
+        id++;
     }
-    
+
+
     private static void createUserAccount(String name, String accountType) {
         if (accountType.equals("User")) {
             User user = new User(name, id);
@@ -175,11 +179,13 @@ class Main {
     }
     
     private static void handleAdminLogin(AllUser.UserInfo userInfo) {
-        System.out.println("\nADMINISTRATOR LOGIN NOTICE");
-        System.out.println("Full administrator login is currently disabled.");
-        System.out.println("Please use the demo access from the main menu.");
-        System.out.println("Your admin account: " + userInfo.getName() + " (ID: " + userInfo.getId() + ")");
-        System.out.println("Full access will be available in the next update.");
+        Admin admin = Admin.createAccount(userInfo.getName(), userInfo.getId());
+        if (admin.login(userInfo.getId())) {
+            System.out.println("Welcome, Admin " + admin.getName() + "!");
+            AdminMainMenu.displayAdminMenu(admin, sc, allUser, songCatalog); // pass registry + catalog
+        } else {
+            System.out.println("Invalid admin id.");
+        }
     }
     
     private static int getIntInput(String prompt) {
@@ -195,4 +201,11 @@ class Main {
             }
         }
     }
+
+
+
+
+
+
+
 }
