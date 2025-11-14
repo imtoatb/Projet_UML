@@ -8,6 +8,8 @@ public class UserMainMenu {
         List<Song> allSongs = MusicDatabase.getAllSongs();
         Song currentSong = null;
         
+        user.setCurrentSongList(allSongs);
+        
         while (inUserMenu) {
             System.out.println("\n========================================");
             System.out.println("             USER MENU");
@@ -19,42 +21,95 @@ public class UserMainMenu {
             System.out.println("5. Now Playing");
             System.out.println("6. Browse All Songs");
             System.out.println("7. Search Songs");
-            System.out.println("8. Log Out");
+            System.out.println("8. Volume Controls");
+            System.out.println("9. Log Out");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
             int choice = sc.nextInt();
             sc.nextLine();
             
+            String result = "";
+            
             switch (choice) {
                 case 1:
-                    currentSong = playSelectedSong(user, sc);
+                    currentSong = playSelectedSong(user, sc, allSongs);
+                    result = "Song selected";
                     break;
                 case 2:
                     if (currentSong != null) {
-                        System.out.println(user.pauseSong(currentSong));
+                        result = user.pauseSong(currentSong);
                     } else {
-                        System.out.println("No song is currently playing. Please play a song first.");
+                        result = "No song is currently playing. Please play a song first.";
                     }
                     break;
                 case 3:
-                    System.out.println(user.nextSong(allSongs));
+                    result = user.nextSong();
                     break;
                 case 4:
-                    System.out.println(user.previousSong(allSongs));
+                    result = user.previousSong();
                     break;
                 case 5:
-                    System.out.println(user.getCurrentSong(allSongs));
+                    result = user.getCurrentSong();
                     break;
                 case 6:
                     browseAllSongs();
+                    result = "Songs displayed";
                     break;
                 case 7:
                     searchSongs(sc);
+                    result = "Search completed";
                     break;
                 case 8:
-                    System.out.println(user.logOut());
+                    handleVolumeControls(user, sc);
+                    result = "Volume adjusted";
+                    break;
+                case 9:
+                    result = user.logOut();
                     inUserMenu = false;
+                    break;
+                default:
+                    result = "Invalid choice. Please try again.";
+            }
+            
+        
+            if (!result.isEmpty()) {
+                System.out.println("\n" + result);
+                System.out.println(user.getVolumeDisplay());
+            }
+        }
+    }
+    
+    private static void handleVolumeControls(User user, Scanner sc) {
+        boolean inVolumeMenu = true;
+        
+        while (inVolumeMenu) {
+            System.out.println("\n--- VOLUME CONTROLS ---");
+            System.out.println(user.getVolumeDisplay());
+            System.out.println("1. Increase Volume (+10%)");
+            System.out.println("2. Decrease Volume (-10%)");
+            System.out.println("3. Set Specific Volume");
+            System.out.println("4. Back to Main Menu");
+            System.out.print("Enter your choice: ");
+            
+            int volumeChoice = sc.nextInt();
+            sc.nextLine();
+            
+            switch (volumeChoice) {
+                case 1:
+                    System.out.println(user.increaseVolume());
+                    break;
+                case 2:
+                    System.out.println(user.decreaseVolume());
+                    break;
+                case 3:
+                    System.out.print("Enter volume level (0-100): ");
+                    int newVolume = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println(user.setVolume(newVolume));
+                    break;
+                case 4:
+                    inVolumeMenu = false;
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -62,11 +117,10 @@ public class UserMainMenu {
         }
     }
     
-    private static Song playSelectedSong(User user, Scanner sc) {
+ 
+    private static Song playSelectedSong(User user, Scanner sc, List<Song> allSongs) {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
-            // Trouver l'index de la chanson sélectionnée
-            List<Song> allSongs = MusicDatabase.getAllSongs();
             int songIndex = -1;
             for (int i = 0; i < allSongs.size(); i++) {
                 if (allSongs.get(i).name.equals(selectedSong.name)) {

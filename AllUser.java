@@ -27,7 +27,7 @@ public class AllUser {
 
         @Override
         public String toString() {
-            return "UserInfo{name='" + name + "', id=" + id + ", accountType='" + accountType + "'}";
+            return "UserInfo{name ='" + name + "', id =" + id + ", accountType='" + accountType + "'}";
         }
     }
 

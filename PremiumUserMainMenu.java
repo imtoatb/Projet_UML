@@ -1,6 +1,5 @@
-import java.util.List;
 import java.util.Scanner;
-
+import java.util.List;
 
 public class PremiumUserMainMenu {
     
@@ -9,6 +8,8 @@ public class PremiumUserMainMenu {
         Playlist currentPlaylist = null;
         List<Song> allSongs = MusicDatabase.getAllSongs();
         Song currentSong = null;
+        
+        pUser.setCurrentSongList(allSongs);
         
         while (inPremiumMenu) {
             System.out.println("\n========================================");
@@ -20,82 +21,160 @@ public class PremiumUserMainMenu {
             System.out.println("  3. Next Song");
             System.out.println("  4. Previous Song");
             System.out.println("  5. Now Playing");
-            System.out.println("  6. Browse All Songs");
-            System.out.println("  7. Search Songs");
+            System.out.println("  6. Toggle Shuffle Mode");
+            System.out.println("  7. Browse All Songs");
+            System.out.println("  8. Search Songs");
             System.out.println("Playlist Management:");
-            System.out.println("  8. Create Playlist");
-            System.out.println("  9. Add Song to Playlist");
-            System.out.println("  10. Remove Song from Playlist");
-            System.out.println("  11. Play Playlist");
-            System.out.println("  12. View My Playlists");
+            System.out.println("  9. Create Playlist");
+            System.out.println("  10. Add Song to Playlist");
+            System.out.println("  11. Remove Song from Playlist");
+            System.out.println("  12. Play Playlist");
+            System.out.println("  13. Shuffle Playlist");
+            System.out.println("  14. View My Playlists");
             System.out.println("Premium Features:");
-            System.out.println("  13. Download Song");
-            System.out.println("  14. Log Out");
+            System.out.println("  15. Download Song");
+            System.out.println("  16. Volume Controls");
+            System.out.println("  17. Log Out");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
             int choice = sc.nextInt();
             sc.nextLine();
             
+            String result = "";
+            
             switch (choice) {
                 case 1:
-                    currentSong = playSelectedSong(pUser, sc);
+                    currentSong = playSelectedSong(pUser, sc, allSongs);
+                    if (currentSong != null) {
+                        result = pUser.playSong(currentSong);
+                    } else {
+                        result = "No song selected.";
+                    }
                     break;
                 case 2:
                     if (currentSong != null) {
-                        System.out.println(pUser.pauseSong(currentSong));
+                        result = pUser.pauseSong(currentSong);
                     } else {
-                        System.out.println("No song is currently playing. Please play a song first.");
+                        result = "No song is currently playing. Please play a song first.";
                     }
                     break;
                 case 3:
-                    System.out.println(pUser.nextSong(allSongs));
+                    result = pUser.nextSong();
                     break;
                 case 4:
-                    System.out.println(pUser.previousSong(allSongs));
+                    result = pUser.previousSong();
                     break;
                 case 5:
-                    System.out.println(pUser.getCurrentSong(allSongs));
+                    result = pUser.getCurrentSong();
                     break;
                 case 6:
-                    browseAllSongs();
+                    result = pUser.toggleShuffle(allSongs);
                     break;
                 case 7:
-                    searchSongs(sc);
+                    result = browseAllSongs();
                     break;
                 case 8:
-                    currentPlaylist = createPlaylist(pUser, sc);
+                    result = searchSongs(sc);
                     break;
                 case 9:
-                    addSongToPlaylist(pUser, currentPlaylist, sc);
+                    currentPlaylist = createPlaylist(pUser, sc);
+                    result = "Playlist '" + currentPlaylist.getName() + "' created successfully!";
                     break;
                 case 10:
-                    removeSongFromPlaylist(pUser, currentPlaylist, sc);
+                    result = addSongToPlaylist(pUser, currentPlaylist, sc);
                     break;
                 case 11:
-                    playPlaylist(pUser, currentPlaylist);
+                    result = removeSongFromPlaylist(pUser, currentPlaylist, sc);
                     break;
                 case 12:
-                    viewUserPlaylists(pUser);
+                    if (currentPlaylist != null) {
+                        result = pUser.playPlaylist(currentPlaylist);
+                    } else {
+                        result = "No playlist available. Please create one first.";
+                    }
                     break;
                 case 13:
-                    downloadSelectedSong(pUser, sc);
+                    if (currentPlaylist != null) {
+                        result = pUser.shufflePlaylist(currentPlaylist);
+                    } else {
+                        result = "No playlist available. Please create one first.";
+                    }
                     break;
                 case 14:
-                    System.out.println(pUser.logOut());
+                    result = viewUserPlaylists(pUser);
+                    break;
+                case 15:
+                    result = downloadSelectedSong(pUser, sc);
+                    break;
+                case 16:
+                    handleVolumeControls(pUser, sc);
+                    result = "Volume controls closed";
+                    break;
+                case 17:
+                    result = pUser.logOut();
                     inPremiumMenu = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    result = "Invalid choice. Please try again.";
+            }
+            
+            // Afficher le résultat + volume après chaque action
+            if (!result.isEmpty() && choice != 16) { 
+                System.out.println("\n" + result);
+                System.out.println(pUser.getVolumeDisplay());
             }
         }
     }
     
-    private static Song playSelectedSong(PremiumUser pUser, Scanner sc) {
+    private static void handleVolumeControls(PremiumUser pUser, Scanner sc) {
+        boolean inVolumeMenu = true;
+        
+        while (inVolumeMenu) {
+            System.out.println("\n--- VOLUME CONTROLS ---");
+            System.out.println(pUser.getVolumeDisplay());
+            System.out.println("1. Increase Volume (+10%)");
+            System.out.println("2. Decrease Volume (-10%)");
+            System.out.println("3. Set Specific Volume");
+            System.out.println("4. Back to Main Menu");
+            System.out.print("Enter your choice: ");
+            
+            int volumeChoice = sc.nextInt();
+            sc.nextLine();
+            
+            String volumeResult = "";
+            
+            switch (volumeChoice) {
+                case 1:
+                    volumeResult = pUser.increaseVolume();
+                    break;
+                case 2:
+                    volumeResult = pUser.decreaseVolume();
+                    break;
+                case 3:
+                    System.out.print("Enter volume level (0-100): ");
+                    int newVolume = sc.nextInt();
+                    sc.nextLine();
+                    volumeResult = pUser.setVolume(newVolume);
+                    break;
+                case 4:
+                    inVolumeMenu = false;
+                    volumeResult = "Returning to main menu...";
+                    break;
+                default:
+                    volumeResult = "Invalid choice. Please try again.";
+            }
+            
+           
+            if (!volumeResult.isEmpty()) {
+                System.out.println(volumeResult);
+            }
+        }
+    }
+    
+    private static Song playSelectedSong(PremiumUser pUser, Scanner sc, List<Song> allSongs) {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
-            // Trouver l'index de la chanson sélectionnée
-            List<Song> allSongs = MusicDatabase.getAllSongs();
             int songIndex = -1;
             for (int i = 0; i < allSongs.size(); i++) {
                 if (allSongs.get(i).name.equals(selectedSong.name)) {
@@ -106,25 +185,17 @@ public class PremiumUserMainMenu {
             if (songIndex != -1) {
                 pUser.resetSongIndex(songIndex);
             }
-            System.out.println(pUser.playSong(selectedSong));
             return selectedSong;
         }
         return null;
     }
     
-    private static void pauseSelectedSong(PremiumUser pUser, Scanner sc) {
+    private static String downloadSelectedSong(PremiumUser pUser, Scanner sc) {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
-            selectedSong.playingtime = (int)(Math.random() * selectedSong.duration / 2);
-            System.out.println(pUser.pauseSong(selectedSong));
+            return pUser.downloadSong(selectedSong);
         }
-    }
-    
-    private static void downloadSelectedSong(PremiumUser pUser, Scanner sc) {
-        Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
-        if (selectedSong != null) {
-            System.out.println(pUser.downloadSong(selectedSong));
-        }
+        return "No song selected for download.";
     }
     
     private static Playlist createPlaylist(PremiumUser pUser, Scanner sc) {
@@ -133,9 +204,7 @@ public class PremiumUserMainMenu {
         
         Playlist playlist = new Playlist(playlistName, pUser.getId());
         MusicDatabase.addPlaylist(playlist);
-        System.out.println("Playlist '" + playlistName + "' created successfully!");
         
-        // Demander si l'utilisateur veut ajouter des chansons maintenant
         System.out.print("Would you like to add songs to this playlist now? (yes/no): ");
         String response = sc.nextLine().toLowerCase();
         
@@ -146,28 +215,26 @@ public class PremiumUserMainMenu {
         return playlist;
     }
     
-    private static void addSongToPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
+    private static String addSongToPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
         if (playlist == null) {
-            System.out.println("Please create a playlist first (option 5).");
-            return;
+            return "Please create a playlist first (option 9).";
         }
         
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
-            System.out.println(pUser.addToPlaylist(selectedSong, playlist));
-            System.out.println("Playlist now contains " + playlist.getSongCount() + " songs.");
+            String result = pUser.addToPlaylist(selectedSong, playlist);
+            return result + " Playlist now contains " + playlist.getSongCount() + " songs.";
         }
+        return "No song selected to add to playlist.";
     }
     
-    private static void removeSongFromPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
+    private static String removeSongFromPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
         if (playlist == null) {
-            System.out.println("No playlist available. Please create one first.");
-            return;
+            return "No playlist available. Please create one first.";
         }
         
         if (playlist.getSongCount() == 0) {
-            System.out.println("Playlist is empty. No songs to remove.");
-            return;
+            return "Playlist is empty. No songs to remove.";
         }
         
         System.out.println("\nSongs in playlist '" + playlist.getName() + "':");
@@ -177,83 +244,74 @@ public class PremiumUserMainMenu {
         }
         
         System.out.print("Select song number to remove (1-" + songs.length + "): ");
+        String line = sc.nextLine();
         try {
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice = Integer.parseInt(line.trim());
             
             if (choice >= 1 && choice <= songs.length) {
                 String songName = songs[choice - 1];
-                Song songToRemove = new Song(songName, "", 0, 0); // Créer un objet Song temporaire
-                System.out.println(pUser.removeFromPlaylist(songToRemove, playlist));
+                Song songToRemove = new Song(songName, "", 0, 0);
+                return pUser.removeFromPlaylist(songToRemove, playlist);
             } else {
-                System.out.println("Invalid selection.");
+                return "Invalid selection.";
             }
-        } catch (Exception e) {
-            System.out.println("Invalid input.");
-            sc.nextLine();
+        } catch (NumberFormatException e) {
+            return "Invalid input. Please enter a number.";
         }
     }
     
-    private static void playPlaylist(PremiumUser pUser, Playlist playlist) {
-        if (playlist == null) {
-            System.out.println("No playlist available. Please create one first.");
-            return;
-        }
-        
-        System.out.println(pUser.playPlaylist(playlist));
-    }
-    
-    private static void viewUserPlaylists(PremiumUser pUser) {
-        List<Playlist> userPlaylists = pUser.getMyPlaylists();
-        
-        if (userPlaylists.isEmpty()) {
-            System.out.println("You don't have any playlists yet.");
-            System.out.println("Use 'Create Playlist' to make your first playlist!");
-            return;
-        }
-        
-        System.out.println("\nYOUR PLAYLISTS:");
-        System.out.println("================");
-        for (int i = 0; i < userPlaylists.size(); i++) {
-            Playlist playlist = userPlaylists.get(i);
-            System.out.println((i + 1) + ". " + playlist.getName() + " (" + playlist.getSongCount() + " songs)");
-        }
-    }
-    
-    private static void browseAllSongs() {
-        System.out.println("\nMUSIC LIBRARY - ALL SONGS");
-        System.out.println("=========================");
+    private static String browseAllSongs() {
+        StringBuilder result = new StringBuilder();
+        result.append("\nMUSIC LIBRARY - ALL SONGS\n");
+        result.append("=========================\n");
         List<Song> allSongs = MusicDatabase.getAllSongs();
         
         for (int i = 0; i < allSongs.size(); i++) {
             Song song = allSongs.get(i);
-            System.out.printf("%2d. %-25s - %-20s (%.0fs)\n", 
-                i + 1, song.name, song.artist, song.duration);
+            result.append(String.format("%2d. %-25s - %-20s (%.0fs)\n", 
+                i + 1, song.name, song.artist, song.duration));
         }
         
-        System.out.println("\nTotal songs: " + allSongs.size());
+        result.append("\nTotal songs: ").append(allSongs.size());
+        return result.toString();
     }
     
-    private static void searchSongs(Scanner sc) {
+    private static String searchSongs(Scanner sc) {
         System.out.print("Enter song name or artist to search: ");
         String query = sc.nextLine();
         
         List<Song> results = MusicDatabase.searchSongs(query);
         
         if (results.isEmpty()) {
-            System.out.println("No songs found matching: " + query);
+            return "No songs found matching: " + query;
         } else {
-            System.out.println("\nSEARCH RESULTS for '" + query + "':");
-            System.out.println("=========================");
+            StringBuilder result = new StringBuilder();
+            result.append("\nSEARCH RESULTS for '").append(query).append("':\n");
+            result.append("=========================\n");
             for (int i = 0; i < results.size(); i++) {
                 Song song = results.get(i);
-                System.out.printf("%2d. %-25s - %-20s (%.0fs)\n", 
-                    i + 1, song.name, song.artist, song.duration);
+                result.append(String.format("%2d. %-25s - %-20s (%.0fs)\n", 
+                    i + 1, song.name, song.artist, song.duration));
             }
+            return result.toString();
         }
     }
+    
+    private static String viewUserPlaylists(PremiumUser pUser) {
+        List<Playlist> userPlaylists = pUser.getMyPlaylists();
+        
+        if (userPlaylists.isEmpty()) {
+            return "You don't have any playlists yet.\nUse 'Create Playlist' to make your first playlist!";
+        }
+        
+        StringBuilder result = new StringBuilder();
+        result.append("\nYOUR PLAYLISTS:\n");
+        result.append("================\n");
+        for (int i = 0; i < userPlaylists.size(); i++) {
+            Playlist playlist = userPlaylists.get(i);
+            result.append((i + 1)).append(". ").append(playlist.getName())
+                  .append(" (").append(playlist.getSongCount()).append(" songs)\n");
+        }
+        return result.toString();
+    }
 }
-
-
-    
-    
