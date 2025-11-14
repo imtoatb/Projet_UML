@@ -165,8 +165,7 @@ public class PremiumUserMainMenu {
                     volumeResult = "Invalid choice. Please try again.";
             }
             
-           
-            if (!volumeResult.isEmpty()) {
+                       if (!volumeResult.isEmpty()) {
                 System.out.println(volumeResult);
             }
         }
