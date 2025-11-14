@@ -5,6 +5,8 @@ public class UserMainMenu {
     
     public static void displayUserMenu(User user, Scanner sc) {
         boolean inUserMenu = true;
+        List<Song> allSongs = MusicDatabase.getAllSongs();
+        Song currentSong = null;
         
         while (inUserMenu) {
             System.out.println("\n========================================");
@@ -12,9 +14,12 @@ public class UserMainMenu {
             System.out.println("========================================");
             System.out.println("1. Play Song");
             System.out.println("2. Pause Song");
-            System.out.println("3. Browse All Songs");
-            System.out.println("4. Search Songs");
-            System.out.println("5. Log Out");
+            System.out.println("3. Next Song");
+            System.out.println("4. Previous Song");
+            System.out.println("5. Now Playing");
+            System.out.println("6. Browse All Songs");
+            System.out.println("7. Search Songs");
+            System.out.println("8. Log Out");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
@@ -23,18 +28,31 @@ public class UserMainMenu {
             
             switch (choice) {
                 case 1:
-                    playSelectedSong(user, sc);
+                    currentSong = playSelectedSong(user, sc);
                     break;
                 case 2:
-                    pauseSelectedSong(user, sc);
+                    if (currentSong != null) {
+                        System.out.println(user.pauseSong(currentSong));
+                    } else {
+                        System.out.println("No song is currently playing. Please play a song first.");
+                    }
                     break;
                 case 3:
-                    browseAllSongs();
+                    System.out.println(user.nextSong(allSongs));
                     break;
                 case 4:
-                    searchSongs(sc);
+                    System.out.println(user.previousSong(allSongs));
                     break;
                 case 5:
+                    System.out.println(user.getCurrentSong(allSongs));
+                    break;
+                case 6:
+                    browseAllSongs();
+                    break;
+                case 7:
+                    searchSongs(sc);
+                    break;
+                case 8:
                     System.out.println(user.logOut());
                     inUserMenu = false;
                     break;
@@ -44,20 +62,25 @@ public class UserMainMenu {
         }
     }
     
-    private static void playSelectedSong(User user, Scanner sc) {
+    private static Song playSelectedSong(User user, Scanner sc) {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
+            // Trouver l'index de la chanson sélectionnée
+            List<Song> allSongs = MusicDatabase.getAllSongs();
+            int songIndex = -1;
+            for (int i = 0; i < allSongs.size(); i++) {
+                if (allSongs.get(i).name.equals(selectedSong.name)) {
+                    songIndex = i;
+                    break;
+                }
+            }
+            if (songIndex != -1) {
+                user.resetSongIndex(songIndex);
+            }
             System.out.println(user.playSong(selectedSong));
+            return selectedSong;
         }
-    }
-    
-    private static void pauseSelectedSong(User user, Scanner sc) {
-        Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
-        if (selectedSong != null) {
-            // Simuler un temps de lecture aléatoire
-            selectedSong.playingtime = (int)(Math.random() * selectedSong.duration / 2);
-            System.out.println(user.pauseSong(selectedSong));
-        }
+        return null;
     }
     
     private static void browseAllSongs() {

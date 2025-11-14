@@ -7,6 +7,8 @@ public class PremiumUserMainMenu {
     public static void displayPremiumUserMenu(PremiumUser pUser, Scanner sc) {
         boolean inPremiumMenu = true;
         Playlist currentPlaylist = null;
+        List<Song> allSongs = MusicDatabase.getAllSongs();
+        Song currentSong = null;
         
         while (inPremiumMenu) {
             System.out.println("\n========================================");
@@ -15,17 +17,20 @@ public class PremiumUserMainMenu {
             System.out.println("Music Controls:");
             System.out.println("  1. Play Song");
             System.out.println("  2. Pause Song");
-            System.out.println("  3. Browse All Songs");
-            System.out.println("  4. Search Songs");
+            System.out.println("  3. Next Song");
+            System.out.println("  4. Previous Song");
+            System.out.println("  5. Now Playing");
+            System.out.println("  6. Browse All Songs");
+            System.out.println("  7. Search Songs");
             System.out.println("Playlist Management:");
-            System.out.println("  5. Create Playlist");
-            System.out.println("  6. Add Song to Playlist");
-            System.out.println("  7. Remove Song from Playlist");
-            System.out.println("  8. Play Playlist");
-            System.out.println("  9. View My Playlists");
+            System.out.println("  8. Create Playlist");
+            System.out.println("  9. Add Song to Playlist");
+            System.out.println("  10. Remove Song from Playlist");
+            System.out.println("  11. Play Playlist");
+            System.out.println("  12. View My Playlists");
             System.out.println("Premium Features:");
-            System.out.println("  10. Download Song");
-            System.out.println("  11. Log Out");
+            System.out.println("  13. Download Song");
+            System.out.println("  14. Log Out");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
@@ -34,36 +39,49 @@ public class PremiumUserMainMenu {
             
             switch (choice) {
                 case 1:
-                    playSelectedSong(pUser, sc);
+                    currentSong = playSelectedSong(pUser, sc);
                     break;
                 case 2:
-                    pauseSelectedSong(pUser, sc);
+                    if (currentSong != null) {
+                        System.out.println(pUser.pauseSong(currentSong));
+                    } else {
+                        System.out.println("No song is currently playing. Please play a song first.");
+                    }
                     break;
                 case 3:
-                    browseAllSongs();
+                    System.out.println(pUser.nextSong(allSongs));
                     break;
                 case 4:
-                    searchSongs(sc);
+                    System.out.println(pUser.previousSong(allSongs));
                     break;
                 case 5:
-                    currentPlaylist = createPlaylist(pUser, sc);
+                    System.out.println(pUser.getCurrentSong(allSongs));
                     break;
                 case 6:
-                    addSongToPlaylist(pUser, currentPlaylist, sc);
+                    browseAllSongs();
                     break;
                 case 7:
-                    removeSongFromPlaylist(pUser, currentPlaylist, sc);
+                    searchSongs(sc);
                     break;
                 case 8:
-                    playPlaylist(pUser, currentPlaylist);
+                    currentPlaylist = createPlaylist(pUser, sc);
                     break;
                 case 9:
-                    viewUserPlaylists(pUser);
+                    addSongToPlaylist(pUser, currentPlaylist, sc);
                     break;
                 case 10:
-                    downloadSelectedSong(pUser, sc);
+                    removeSongFromPlaylist(pUser, currentPlaylist, sc);
                     break;
                 case 11:
+                    playPlaylist(pUser, currentPlaylist);
+                    break;
+                case 12:
+                    viewUserPlaylists(pUser);
+                    break;
+                case 13:
+                    downloadSelectedSong(pUser, sc);
+                    break;
+                case 14:
                     System.out.println(pUser.logOut());
                     inPremiumMenu = false;
                     break;
@@ -73,11 +91,25 @@ public class PremiumUserMainMenu {
         }
     }
     
-    private static void playSelectedSong(PremiumUser pUser, Scanner sc) {
+    private static Song playSelectedSong(PremiumUser pUser, Scanner sc) {
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
+            // Trouver l'index de la chanson sélectionnée
+            List<Song> allSongs = MusicDatabase.getAllSongs();
+            int songIndex = -1;
+            for (int i = 0; i < allSongs.size(); i++) {
+                if (allSongs.get(i).name.equals(selectedSong.name)) {
+                    songIndex = i;
+                    break;
+                }
+            }
+            if (songIndex != -1) {
+                pUser.resetSongIndex(songIndex);
+            }
             System.out.println(pUser.playSong(selectedSong));
+            return selectedSong;
         }
+        return null;
     }
     
     private static void pauseSelectedSong(PremiumUser pUser, Scanner sc) {
@@ -221,3 +253,7 @@ public class PremiumUserMainMenu {
         }
     }
 }
+
+
+    
+    
