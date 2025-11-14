@@ -44,7 +44,7 @@ public class User {
     }
 
     public String playSong(Song song){
-        return song.name + " is playing";
+        return song.name + "  is playing";
     }
 
     public String pauseSong(Song song){
