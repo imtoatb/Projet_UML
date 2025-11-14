@@ -1,15 +1,15 @@
 import java.util.List;
 
 public class User {
-    private String name;
-    private int userId;
+    String name;
+    int userId;
     boolean connected;
 
     int currentSongIndex = 0;
-    private List<Song> currentSongList; 
-    private int volume = 50;
-    
-    private boolean accountActive = true;
+    List<Song> currentSongList; 
+    int volume = 50;
+
+    boolean accountActive = true;
     
     public User(String name, int userId){
         this.name = name;

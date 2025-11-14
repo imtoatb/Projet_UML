@@ -56,8 +56,8 @@ public class PremiumUserMainMenu {
                     
                     if (currentSong != null) {
                         result = pUser.playSong(currentSong);
-                    } e
-                    lse {
+                    } 
+                    else {
                         result = "No song selected.";
                     }
                     break;
@@ -149,8 +149,8 @@ public class PremiumUserMainMenu {
                     System.out.print("Are you sure you want to delete your account? This action cannot be undone. (YES): ");
                     String confirmation = sc.nextLine().toLowerCase();
                     if (confirmation.equals("YES") || confirmation.equals("y")) {
-                        result = user.deleteAccount();
-                        inUserMenu = false;
+                        result = pUser.deleteAccount();
+                        inPremiumMenu = false;
                     } 
                     else {
                         result = "Account deletion cancelled.";
