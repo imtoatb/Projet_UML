@@ -56,4 +56,6 @@ public class PremiumUser extends User {
     public List<Playlist> getMyPlaylists() {
         return MusicDatabase.getUserPlaylists(this.getId());
     }
+
+    //Shuffle method for PremiumUser
 }
