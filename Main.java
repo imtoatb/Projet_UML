@@ -29,11 +29,8 @@ class Main {
                     displaySystemInfo();
                     break;
 
-                case 4:
-                    showAdminNotice();
-                    break;
 
-                case 5:
+                case 4:
                     running = false;
                     System.out.println("Thank you for using MusicHub System!");
                     break;
@@ -52,36 +49,10 @@ class Main {
         System.out.println("1. Register New Account");
         System.out.println("2. Login to Existing Account");
         System.out.println("3. System Information");
-        System.out.println("4. Administrator Access");
-        System.out.println("5. Exit System");
+        System.out.println("4. Exit System");
         System.out.println("========================================");
     }
     
-    private static void showAdminNotice() {
-        System.out.println("\n========================================");
-        System.out.println("       ADMINISTRATOR ACCESS");
-        System.out.println("========================================");
-        System.out.println("   Administrator features are currently");
-        System.out.println("    under construction and development.");
-        System.out.println("");
-        System.out.println("Expected availability: Next system update");
-        System.out.println("Current status: Limited demo access only");
-        System.out.println("========================================");
-
-        System.out.print("\nWould you like to view demo options? (yes/no): ");
-        String response = sc.nextLine().trim().toLowerCase();
-
-        if (response.equals("yes") || response.equals("y")) {
-            // Create a temporary admin for the demo
-            Admin tempAdmin = Admin.createAccount("System Administrator", 9999);
-            tempAdmin.login(9999); // mark as connected
-
-
-            AdminMainMenu.displayAdminMenu(tempAdmin, sc, allUser, songCatalog);
-        } else {
-            System.out.println("Returning to main menu...");
-        }
-    }
     
     private static void displaySystemInfo() {
         System.out.println("\nSYSTEM INFORMATION");
