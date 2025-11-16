@@ -7,6 +7,8 @@ class Main {
     private static AllUser allUser = new AllUser();
     private static Scanner sc = new Scanner(System.in);
     private static List<Song> songCatalog = new ArrayList<>();
+    private static final List<Credential> credentials = new ArrayList<>();
+
 
 
     public static void main(String[] args) {
@@ -84,10 +86,43 @@ class Main {
 
         switch (typeChoice) {
             case 1:
+                String contact;
+                while (true) {
+                    System.out.print("Enter your email or your phone: ");
+                    contact = sc.nextLine().trim();
+                    if (isValidEmail(contact) || isValidPhone(contact)) break;
+                    System.out.println("Please enter a valid email address or phone number.");
+                }
+                String password;
+                do {
+                    System.out.print("Password: ");
+                    password = sc.nextLine().trim();
+                    if (password.isEmpty()) System.out.println("Value cannot be empty.");
+                } while (password.isEmpty());
+
                 createUserAccount(name, "User");
+
+                credentials.add(new Credential(name, id - 1, contact, password, "User"));
+                System.out.println("User registered with credentials.");
                 break;
             case 2:
+
+                while (true) {
+                    System.out.print("Enter your email or your phone: ");
+                    contact = sc.nextLine().trim();
+                    if (isValidEmail(contact) || isValidPhone(contact)) break;
+                    System.out.println("Please enter a valid email address or phone number.");
+                }
+
+                do {
+                    System.out.print("Password: ");
+                    password = sc.nextLine().trim();
+                    if (password.isEmpty()) System.out.println("Value cannot be empty.");
+                } while (password.isEmpty());
+
                 createUserAccount(name, "PremiumUser");
+                credentials.add(new Credential(name, id - 1, contact, password, "PremiumUser"));
+                System.out.println("Premium user registered with credentials.");
                 break;
             case 3:
                 createAdminAccount(name);
@@ -119,13 +154,41 @@ class Main {
         }
         id++;
     }
-    
+
     private static void loginUser() {
         System.out.println("\nUSER LOGIN");
+
+        System.out.print("Enter your mail or your phone : ");
+        String contact = sc.nextLine().trim();
+
+        if (!contact.isEmpty()) {
+            System.out.print("Password: ");
+            String password = sc.nextLine().trim();
+            if (password.isEmpty()) {
+                System.out.println("Error: Password cannot be empty.");
+                return;
+            }
+
+            Credential cred = findCredentialByContactPassword(contact, password);
+            if (cred == null) {
+                System.out.println("Error: Invalid contact or password.");
+                return;
+            }
+
+            AllUser.UserInfo match = findUserInfoByCredential(cred);
+            if (match == null) {
+                System.out.println("Error: Account not found in registry. Please register again.");
+                return;
+            }
+
+            handleUserLogin(match);
+            return;
+        }
+
         System.out.print("Enter your name: ");
         String loginName = sc.nextLine().trim();
         int loginId = getIntInput("Enter your ID: ");
-        
+
         boolean found = false;
         for (AllUser.UserInfo userInfo : allUser.getUsers()) {
             if (userInfo.getName().equalsIgnoreCase(loginName) && userInfo.getId() == loginId) {
@@ -134,7 +197,7 @@ class Main {
                 break;
             }
         }
-        
+
         if (!found) {
             System.out.println("Error: No account found");
         }
@@ -145,12 +208,14 @@ class Main {
 
             case "User":
                 User user = new User(userInfo.getName(), userInfo.getId());
+                fillCredentialsIfAny(user);
                 System.out.println(user.logIn());
                 UserMainMenu.displayUserMenu(user, sc);
                 break;
 
             case "PremiumUser":
                 PremiumUser pUser = new PremiumUser(userInfo.getName(), userInfo.getId());
+                fillCredentialsIfAny(pUser);
                 System.out.println(pUser.logIn());
                 PremiumUserMainMenu.displayPremiumUserMenu(pUser, sc);
                 break;
@@ -195,6 +260,70 @@ class Main {
 
 
 
+
+    // Attach contact/password to the freshly created object if we have them
+    private static void fillCredentialsIfAny(Object obj) {
+        if (obj instanceof PremiumUser) {
+            PremiumUser p = (PremiumUser) obj;
+            for (Credential c : credentials) {
+                if (c.id == p.getId() && "PremiumUser".equals(c.type)) {
+                    p.setCredentials(c.contact, c.password);
+                    break;
+                }
+            }
+        } else if (obj instanceof User) {
+            User u = (User) obj;
+            for (Credential c : credentials) {
+                if (c.id == u.getId() && "User".equals(c.type)) {
+                    u.setCredentials(c.contact, c.password);
+                    break;
+                }
+            }
+        }
+    }
+
+    private static Credential findCredentialByContactPassword(String contact, String password) {
+        if (contact == null || password == null) return null;
+        for (Credential c : credentials) {
+            String cContact = c.getContact();
+            String cPassword = c.getPassword();
+            if (cContact != null && cPassword != null
+                    && cContact.equalsIgnoreCase(contact)
+                    && cPassword.equals(password)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    private static AllUser.UserInfo findUserInfoByCredential(Credential cred) {
+        if (cred == null) return null;
+        for (AllUser.UserInfo u : allUser.getUsers()) {
+            if (u.getId() == cred.getId()
+                    && u.getName().equalsIgnoreCase(cred.getName())
+                    && u.getAccountType().equals(cred.getType())) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+
+    private static boolean isValidEmail(String s) {
+        if (s == null) return false;
+        String x = s.trim();
+        int at = x.indexOf('@');
+        int dot = x.lastIndexOf('.');
+        return at > 0 && dot > at + 1 && dot < x.length() - 1;
+    }
+
+    private static boolean isValidPhone(String s) {
+        if (s == null) return false;
+        String digits = s.replaceAll("[^0-9]", "");
+        return digits.length() >= 7 && digits.length() <= 20;
+    }
+
+   
 
 
 

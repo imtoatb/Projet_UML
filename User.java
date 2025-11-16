@@ -10,6 +10,8 @@ public class User {
     int volume = 50;
 
     boolean accountActive = true;
+    private String contact;
+    private String password;
     
     public User(String name, int userId){
         this.name = name;
@@ -42,7 +44,7 @@ public class User {
         }
         if (connected == true){
             return "You're already connected";
-        }    
+        }
         else{
             connected = true;
             return "You're now on your User account";

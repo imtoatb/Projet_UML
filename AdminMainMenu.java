@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public final class AdminMainMenu {
 
-    // ---- local helpers (work on provided catalog) ----
+
     private static Song findSong(List<Song> catalog, String name, String artist) {
         for (Song s : catalog) {
             if (s.name.equalsIgnoreCase(name) && s.artist.equalsIgnoreCase(artist)) return s;
@@ -12,7 +12,7 @@ public final class AdminMainMenu {
     }
 
     private static boolean askYesNo(Scanner sc, String prompt) {
-        System.out.print(prompt + " (y/n): ");
+        System.out.print(prompt + " (yes/no): ");
         String a = sc.nextLine().trim();
         return a.equalsIgnoreCase("y") || a.equalsIgnoreCase("yes");
     }
@@ -39,7 +39,6 @@ public final class AdminMainMenu {
         boolean in = true;
         while (in) {
             System.out.println("\n********** Admin Menu **********");
-            System.out.println("0) Back");
             System.out.println("1) Add Song");
             System.out.println("2) Modify Song");
             System.out.println("3) Delete Song");
@@ -51,10 +50,6 @@ public final class AdminMainMenu {
             int choice = readInt(sc, "Enter your choice: ");
 
             switch (choice) {
-                case 0:
-                    in = false;
-                    break;
-
                 case 1: { // Add Song
                     System.out.print("Song name (0 = cancel): ");
                     String name = sc.nextLine().trim();
@@ -77,7 +72,8 @@ public final class AdminMainMenu {
                     Song song = new Song(name, artist, duration, 0);
                     if (findSong(songCatalog, name, artist) == null) songCatalog.add(song);
                     System.out.println(admin.addSongs(song));
-                } break;
+                    break;
+                }
 
                 case 2: { // Modify Song
                     System.out.print("Song to modify — name (0 = cancel): ");
@@ -127,7 +123,8 @@ public final class AdminMainMenu {
                             }
                             song.name = newName;
                             System.out.println("Updated: " + song.name + " - " + song.artist + " (" + song.duration + "s)");
-                        } break;
+                            break;
+                        }
                         case 2: {
                             System.out.print("New artist (0 = cancel): ");
                             String newArtist = sc.nextLine().trim();
@@ -138,7 +135,8 @@ public final class AdminMainMenu {
                             }
                             song.artist = newArtist;
                             System.out.println("Updated: " + song.name + " - " + song.artist + " (" + song.duration + "s)");
-                        } break;
+                            break;
+                        }
                         case 3: {
                             System.out.print("New duration in seconds (0 = cancel): ");
                             try {
@@ -150,7 +148,8 @@ public final class AdminMainMenu {
                                 sc.nextLine();
                                 System.out.println("Invalid duration. Cancelled.");
                             }
-                        } break;
+                            break;
+                        }
                         case 4: {
                             System.out.print("New playing time in seconds (0 = cancel): ");
                             try {
@@ -162,12 +161,14 @@ public final class AdminMainMenu {
                                 sc.nextLine();
                                 System.out.println("Invalid playing time. Cancelled.");
                             }
-                        } break;
+                            break;
+                        }
                         default:
                             System.out.println("Invalid choice.");
                             break;
                     }
-                } break;
+                    break;
+                }
 
                 case 3: { // Delete Song
                     System.out.print("Song to delete — name (0 = cancel): ");
@@ -202,7 +203,8 @@ public final class AdminMainMenu {
                     }
                     songCatalog.remove(song);
                     System.out.println(admin.deleteSongs(song));
-                } break;
+                    break;
+                }
 
                 case 4: { // Manage users
                     System.out.println("1) Upgrade user to Premium");
@@ -244,13 +246,15 @@ public final class AdminMainMenu {
                     } else {
                         System.out.println("Invalid choice.");
                     }
-                } break;
+                    break;
+                }
 
                 case 5: {
                     admin.logout();
                     System.out.println("Admin logged out.");
                     in = false;
-                } break;
+                    break;
+                }
 
                 case 6: {
                     System.out.print("Type YES to confirm deletion: ");
@@ -262,7 +266,8 @@ public final class AdminMainMenu {
                     } else {
                         System.out.println("Deletion cancelled.");
                     }
-                } break;
+                    break;
+                }
 
                 default:
                     System.out.println("Invalid choice.");
