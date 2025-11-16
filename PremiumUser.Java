@@ -57,3 +57,5 @@ public class PremiumUser extends User {
         return MusicDatabase.getUserPlaylists(this.getId());
     }
 }
+
+//Comment for commit
