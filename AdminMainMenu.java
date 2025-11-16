@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public final class AdminMainMenu {
 
-    // ---- local helpers (work on provided catalog) ----
+
     private static Song findSong(List<Song> catalog, String name, String artist) {
         for (Song s : catalog) {
             if (s.name.equalsIgnoreCase(name) && s.artist.equalsIgnoreCase(artist)) return s;
@@ -12,7 +12,7 @@ public final class AdminMainMenu {
     }
 
     private static boolean askYesNo(Scanner sc, String prompt) {
-        System.out.print(prompt + " (y/n): ");
+        System.out.print(prompt + " (yes/no): ");
         String a = sc.nextLine().trim();
         return a.equalsIgnoreCase("y") || a.equalsIgnoreCase("yes");
     }
@@ -39,7 +39,6 @@ public final class AdminMainMenu {
         boolean in = true;
         while (in) {
             System.out.println("\n********** Admin Menu **********");
-            System.out.println("0) Back");
             System.out.println("1) Add Song");
             System.out.println("2) Modify Song");
             System.out.println("3) Delete Song");
@@ -51,9 +50,7 @@ public final class AdminMainMenu {
             int choice = readInt(sc, "Enter your choice: ");
 
             switch (choice) {
-                case 0 -> in = false;
-
-                case 1 -> { // Add Song
+                case 1: { // Add Song
                     System.out.print("Song name (0 = cancel): ");
                     String name = sc.nextLine().trim();
                     if ("0".equals(name)) { System.out.println("Cancelled."); break; }
@@ -75,9 +72,10 @@ public final class AdminMainMenu {
                     Song song = new Song(name, artist, duration, 0);
                     if (findSong(songCatalog, name, artist) == null) songCatalog.add(song);
                     System.out.println(admin.addSongs(song));
+                    break;
                 }
 
-                case 2 -> { // Modify Song
+                case 2: { // Modify Song
                     System.out.print("Song to modify — name (0 = cancel): ");
                     String name = sc.nextLine().trim();
                     if ("0".equals(name)) { System.out.println("Cancelled."); break; }
@@ -115,7 +113,7 @@ public final class AdminMainMenu {
                     if (sub == 0) break;
 
                     switch (sub) {
-                        case 1 -> {
+                        case 1: {
                             System.out.print("New name (0 = cancel): ");
                             String newName = sc.nextLine().trim();
                             if ("0".equals(newName)) { System.out.println("Cancelled."); break; }
@@ -125,8 +123,9 @@ public final class AdminMainMenu {
                             }
                             song.name = newName;
                             System.out.println("Updated: " + song.name + " - " + song.artist + " (" + song.duration + "s)");
+                            break;
                         }
-                        case 2 -> {
+                        case 2: {
                             System.out.print("New artist (0 = cancel): ");
                             String newArtist = sc.nextLine().trim();
                             if ("0".equals(newArtist)) { System.out.println("Cancelled."); break; }
@@ -136,8 +135,9 @@ public final class AdminMainMenu {
                             }
                             song.artist = newArtist;
                             System.out.println("Updated: " + song.name + " - " + song.artist + " (" + song.duration + "s)");
+                            break;
                         }
-                        case 3 -> {
+                        case 3: {
                             System.out.print("New duration in seconds (0 = cancel): ");
                             try {
                                 double nd = sc.nextDouble(); sc.nextLine();
@@ -148,8 +148,9 @@ public final class AdminMainMenu {
                                 sc.nextLine();
                                 System.out.println("Invalid duration. Cancelled.");
                             }
+                            break;
                         }
-                        case 4 -> {
+                        case 4: {
                             System.out.print("New playing time in seconds (0 = cancel): ");
                             try {
                                 double np = sc.nextDouble(); sc.nextLine();
@@ -160,12 +161,16 @@ public final class AdminMainMenu {
                                 sc.nextLine();
                                 System.out.println("Invalid playing time. Cancelled.");
                             }
+                            break;
                         }
-                        default -> System.out.println("Invalid choice.");
+                        default:
+                            System.out.println("Invalid choice.");
+                            break;
                     }
+                    break;
                 }
 
-                case 3 -> { // Delete Song
+                case 3: { // Delete Song
                     System.out.print("Song to delete — name (0 = cancel): ");
                     String name = sc.nextLine().trim();
                     if ("0".equals(name)) { System.out.println("Cancelled."); break; }
@@ -198,9 +203,10 @@ public final class AdminMainMenu {
                     }
                     songCatalog.remove(song);
                     System.out.println(admin.deleteSongs(song));
+                    break;
                 }
 
-                case 4 -> { // Manage users
+                case 4: { // Manage users
                     System.out.println("1) Upgrade user to Premium");
                     System.out.println("2) Downgrade premium to Free");
                     int action = readInt(sc, "Choice: ");
@@ -240,15 +246,17 @@ public final class AdminMainMenu {
                     } else {
                         System.out.println("Invalid choice.");
                     }
+                    break;
                 }
 
-                case 5 -> {
+                case 5: {
                     admin.logout();
                     System.out.println("Admin logged out.");
                     in = false;
+                    break;
                 }
 
-                case 6 -> {
+                case 6: {
                     System.out.print("Type YES to confirm deletion: ");
                     String conf = sc.nextLine().trim();
                     if ("YES".equals(conf)) {
@@ -258,9 +266,12 @@ public final class AdminMainMenu {
                     } else {
                         System.out.println("Deletion cancelled.");
                     }
+                    break;
                 }
 
-                default -> System.out.println("Invalid choice.");
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
             }
         }
     }
