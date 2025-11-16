@@ -23,7 +23,7 @@ public class UserMainMenu {
             System.out.println("7. Search Songs");
             System.out.println("8. Volume Controls");
             System.out.println("9. Log Out");
-            System.out.println("  10. Delete account");
+            System.out.println("10. Delete account");
             System.out.println("========================================");
             System.out.print("Enter your choice: ");
             
