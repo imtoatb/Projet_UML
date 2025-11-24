@@ -7,7 +7,7 @@ public class MusicDatabase {
     private static List<Playlist> allPlaylists = new ArrayList<>();
     
     static {
-        initializeSongs(); //To initialize all the static method
+        initializeSongs();                              //To initialize the database 
     }
     
     private static void initializeSongs() {
@@ -32,7 +32,8 @@ public class MusicDatabase {
     
 
     public static Song findSongByName(String name) {
-        for (Song song : allSongs) {
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
             if (song.name.equalsIgnoreCase(name)) {
                 return song;
             }
@@ -43,7 +44,8 @@ public class MusicDatabase {
 
     public static List<Song> findSongsByArtist(String artist) {
         List<Song> result = new ArrayList<>();
-        for (Song song : allSongs) {
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
             if (song.artist.equalsIgnoreCase(artist)) {
                 result.add(song);
             }
@@ -61,7 +63,8 @@ public class MusicDatabase {
     
     public static int getTotalArtists() {
         List<String> artists = new ArrayList<>();
-        for (Song song : allSongs) {
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
             if (!artists.contains(song.artist)) {
                 artists.add(song.artist);
             }
@@ -75,7 +78,8 @@ public class MusicDatabase {
     
     public static List<Song> searchSongs(String query) {
         List<Song> results = new ArrayList<>();
-        for (Song song : allSongs) {
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
 
             if (song.name.toLowerCase().contains(query.toLowerCase()) || song.artist.toLowerCase().contains(query.toLowerCase())) {
 
@@ -85,11 +89,12 @@ public class MusicDatabase {
         return results;
     }
     
+    
     public static List<Playlist> getUserPlaylists(int userId) {
         List<Playlist> userPlaylists = new ArrayList<>();
 
-        for (Playlist playlist : allPlaylists) {
-
+        for (int i = 0; i < allPlaylists.size(); i++) {
+            Playlist playlist = allPlaylists.get(i);
             if (playlist.getUserId() == userId) {
                 userPlaylists.add(playlist);
             }
@@ -100,7 +105,8 @@ public class MusicDatabase {
     
     public static Playlist getPlaylistByName(String name, int userId) {
 
-        for (Playlist playlist : allPlaylists) {
+        for (int i = 0; i < allPlaylists.size(); i++) {
+            Playlist playlist = allPlaylists.get(i);
 
             if (playlist.getName().equalsIgnoreCase(name) && playlist.getUserId() == userId) {
                 return playlist;
@@ -149,7 +155,7 @@ public class MusicDatabase {
         System.out.print("Select a song (1-" + allSongs.size() + "): ");
         try {
             int choice = sc.nextInt();
-            sc.nextLine(); //for the buffer
+            sc.nextLine();                                                      //for the buffer
             
             if (choice >= 1 && choice <= allSongs.size()) {
                 Song selectedSong = allSongs.get(choice - 1);

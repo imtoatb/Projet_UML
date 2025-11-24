@@ -4,15 +4,13 @@ public class Admin {
     private int admin_id;
     private boolean connected;
 
-    public Admin() {}
-
     public Admin(String name, int admin_id){
         this.name = name;
         this.admin_id = admin_id;
         this.connected = false;
     }
 
-    // Login/Logout / Delete ----
+    // Login/Logout / Delete
     public static Admin createAccount(String name, int admin_id){
         return new Admin(name, admin_id);
     }

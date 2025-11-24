@@ -29,6 +29,17 @@ public class AllUser {
         public String toString() {
             return "UserInfo{name ='" + name + "', id =" + id + ", accountType='" + accountType + "'}";
         }
+
+
+        public void deleteAccount() {
+            this.name = null;
+            this.id = -1;
+            this.accountType = "DELETED";
+        }
+
+        public boolean isDeleted() {
+            return name == null && id == -1 && "DELETED".equals(accountType);
+        }
     }
 
     private List<UserInfo> users;
