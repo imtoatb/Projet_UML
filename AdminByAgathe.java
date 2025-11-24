@@ -101,9 +101,6 @@ public class AdminByAgathe {
 
 
     public String addSong(Song song, List<Song> songCatalog){
-        if (!connected) return "Admin must be logged in to manage songs.";
-        if (song == null) return "Song cannot be null.";
-        
      
         for (int i = 0; i < songCatalog.size(); i++) {
             Song s = songCatalog.get(i);
@@ -118,9 +115,6 @@ public class AdminByAgathe {
 
 
     public String deleteSong(Song song, List<Song> songCatalog){
-        if (!connected) return "Admin must be logged in to manage songs.";
-        if (song == null) return "Song cannot be null.";
-        
         boolean removed = songCatalog.remove(song);
         if (removed) {
             return "Song '" + song.name + "' by " + song.artist + " has been deleted from music library.";
@@ -130,6 +124,7 @@ public class AdminByAgathe {
     }
 
 
+    
     public String updateSongInformation(Song song, String newName, String newArtist, double newDuration) { 
         boolean changed = false;
        

@@ -37,7 +37,7 @@ public class User {
         return "Your account has been created";
     }
 
-    //Log In/Out
+   
     public String logIn(){
         if (!accountActive) {
             return "Cannot login: This account has been deleted.";
@@ -81,13 +81,14 @@ public class User {
         this.volume = 50;
         this.accountActive = false;
         
-        return "Your account has been successfully deleted. All your data has been removed.";
+        return "Your account has been successfully deleted";
     }
     
 
     public boolean isAccountActive() {
         return accountActive;
     }
+    
     
  
     public String playSong(Song song){
@@ -105,6 +106,7 @@ public class User {
 
         return song.name + " has been paused at " + song.playingtime;
     }
+
     
     public String nextSong() {
         if (!accountActive) {

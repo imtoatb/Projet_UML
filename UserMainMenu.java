@@ -85,9 +85,10 @@ public class UserMainMenu {
                 
                 case 10: 
                     System.out.print("Are you sure you want to delete your account? This action cannot be undone. (YES): ");
-                    String confirmation = sc.nextLine().toLowerCase();
-                    if (confirmation.equals("YES") || confirmation.equals("y")) {
+                    String confirmation = sc.nextLine();
+                    if (confirmation.equals("YES")) {
                         result = user.deleteAccount();
+                        System.out.println(result);
                         inUserMenu = false;
                     } 
                     else {
