@@ -20,7 +20,7 @@ public class Playlist {
     }
     
     public String[] getSongs() {
-        return Arrays.copyOf(songs, songs.length);
+        return Arrays.copyOf(songs, songCount);                  //og array, size
     }
     
     public int getUserId() {
@@ -33,16 +33,17 @@ public class Playlist {
     
 
     public void addSong(String songName) {
-        for (String song : songs) {
+        for (int i = 0; i < songCount; i++) {                                //songs (tab) -> the playlist 
+            String song = songs[i]; 
             if (song.equals(songName)) {
                 System.out.println("Song '" + songName + "' is already in the playlist.");
                 return;
             }
         }
         
-        String[] newSongs = Arrays.copyOf(songs, songs.length + 1);
-        newSongs[songs.length] = songName;
-        songs = newSongs;
+        String[] newSongs = Arrays.copyOf(songs, songCount + 1);         //copy the playlist + null at the end
+        newSongs[songCount] = songName;
+        songs = newSongs;                                                   //Overwrite the playlist
         songCount++;
     }
     
@@ -50,7 +51,8 @@ public class Playlist {
     public boolean removeSong(String songName) {
         boolean found = false;
         
-        for (String song : songs) {
+        for (int i = 0; i < songCount; i++) {                                //songs (tab) -> the playlist 
+            String song = songs[i]; 
             if (song.equals(songName)) {
                 found = true;
                 break;
@@ -61,10 +63,11 @@ public class Playlist {
             return false;
         }
         
-        String[] newSongs = new String[songs.length - 1];
+        String[] newSongs = new String[songCount - 1];
         int index = 0;
 
-        for (String song : songs) {
+        for (int i = 0; i < songCount; i++) {
+            String song = songs[i]; 
 
             if (!song.equals(songName)) {
                 newSongs[index++] = song;
@@ -77,7 +80,8 @@ public class Playlist {
     
 
     public boolean containsSong(String songName) {
-        for (String song : songs) {
+        for (int i = 0; i < songCount; i++) {                              
+            String song = songs[i]; 
 
             if (song.equals(songName)) {
                 return true;
@@ -94,7 +98,7 @@ public class Playlist {
         }
         
         System.out.println("Songs in playlist '" + name + "':");
-        for (int i = 0; i < songs.length; i++) {
+        for (int i = 0; i < songCount; i++) {
            
             System.out.println((i + 1) + ". " + songs[i]);
 
@@ -111,7 +115,7 @@ public class Playlist {
     
     
     public String[] getList() {
-        return Arrays.copyOf(songs, songs.length);
+        return Arrays.copyOf(songs, songCount);
     }
     
     public void setList(String[] list) {
@@ -134,11 +138,11 @@ public class Playlist {
         StringBuilder playlistContent = new StringBuilder();
         playlistContent.append("Now playing playlist '").append(name).append("':\n");
         
-        for (int i = 0; i < songs.length; i++) {
+        for (int i = 0; i < songCount; i++) {
            
             playlistContent.append(i + 1).append(". ").append(songs[i]);
             
-            if (i < songs.length - 1) {
+            if (i < songCount - 1) {
                 playlistContent.append("\n");
             }
         }
