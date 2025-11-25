@@ -12,7 +12,7 @@ public class PremiumUser extends User {
     }
 
 
-    //Log in 
+  
     @Override
     public String logIn(){
         if (connected == true){
@@ -26,7 +26,7 @@ public class PremiumUser extends User {
 
 
 
-    //For Playlists
+  
     public String createPlaylist(String playlistName){
         Playlist playlist = new Playlist(playlistName, this.getId());
         MusicDatabase.addPlaylist(playlist);
@@ -70,15 +70,13 @@ public class PremiumUser extends User {
 
 
 
-    
-    //Downloading
     public String downloadSong(Song song){
         return "'" + song.name + "' has been downloaded";
     }
 
 
 
-    //For the shuffle
+
     public String toggleShuffle(List<Song> songList) {
         if (songList == null || songList.isEmpty()) {
             return "No songs available to shuffle.";
@@ -103,7 +101,7 @@ public class PremiumUser extends User {
     
 
 
-    //To change song
+
     @Override
     public String nextSong() {
         if (shuffleMode && shuffledPlaylist != null) {
@@ -149,11 +147,11 @@ public class PremiumUser extends User {
     
     public String shufflePlaylist(Playlist playlist) {
         if (playlist == null) {
-            return "No playlist selected.";
+            return "No playlist selected";
         }
         
         if (playlist.getSongCount() == 0) {
-            return "Playlist is empty. Cannot shuffle.";
+            return "Empty playlist cannot be shuffle.";
         }
         
 
@@ -169,7 +167,7 @@ public class PremiumUser extends User {
         }
         
         if (playlistSongs.isEmpty()) {
-            return "No valid songs found in the playlist.";
+            return "No valid songs found in the playlist";
         }
         
         Collections.shuffle(playlistSongs, random);
@@ -178,16 +176,16 @@ public class PremiumUser extends User {
         setCurrentSongList(shuffledPlaylist);
         resetSongIndex(0);
         
-        return "Playlist '" + playlist.getName() + "' shuffled! " + playlistSongs.size() + " songs in random order.";
+        return "Playlist '" + playlist.getName() + "' shuffled ";
     }
 
 
 
-    //To delete the account
+ 
     @Override
     public String deleteAccount() {
         if (!isAccountActive()) {
-            return "This account has already been deleted.";
+            return "This account has already been deleted";
         }
 
         if (connected) {
@@ -206,7 +204,6 @@ public class PremiumUser extends User {
         this.volume = 50;
         this.accountActive = false;
         
-        return "Your Premium account has been successfully deleted. All your data and playlists have been removed.";
+        return "Your Premium account has been deleted";
     }
 }
-//Comment for commit

@@ -91,9 +91,10 @@ public class User {
     
     
  
+    
     public String playSong(Song song){
         if (!accountActive) {
-            return "Cannot play song: This account has been deleted.";
+            return "Cannot play song: This account has been deleted";
         }
 
         return song.name + " is playing";
@@ -101,7 +102,7 @@ public class User {
 
     public String pauseSong(Song song){
         if (!accountActive) {
-            return "Cannot pause song: This account has been deleted.";
+            return "Cannot pause song: This account has been deleted";
         }
 
         return song.name + " has been paused at " + song.playingtime;
@@ -110,10 +111,10 @@ public class User {
     
     public String nextSong() {
         if (!accountActive) {
-            return "Cannot play next song: This account has been deleted.";
+            return "Cannot play next song: This account has been deleted";
         }
         if (currentSongList == null || currentSongList.isEmpty()) {
-            return "No songs available in the library. Please play a song first.";
+            return "No songs available in the library\nPlease play a song first";
         }
         
         currentSongIndex = (currentSongIndex + 1) % currentSongList.size();
@@ -125,10 +126,10 @@ public class User {
 
     public String previousSong() {
         if (!accountActive) {
-            return "Cannot play previous song: This account has been deleted.";
+            return "Cannot play previous song: This account has been deleted";
         }
         if (currentSongList == null || currentSongList.isEmpty()) {
-            return "No songs available in the library. Please play a song first.";
+            return "No songs available in the library\n Please play a song first";
         }
         
         currentSongIndex = (currentSongIndex - 1 + currentSongList.size()) % currentSongList.size();
@@ -140,11 +141,11 @@ public class User {
     
     public String getCurrentSong() {
         if (!accountActive) {
-            return "Cannot get current song: This account has been deleted.";
+            return "Cannot get current song: This account has been deleted";
         }
         
         if (currentSongList == null || currentSongList.isEmpty()) {
-            return "No song is currently playing.";
+            return "No song is currently playing";
         }
         
         Song currentSong = currentSongList.get(currentSongIndex);

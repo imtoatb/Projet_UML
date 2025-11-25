@@ -143,7 +143,6 @@ public class MusicDatabase {
         }
         
         System.out.println("\nAVAILABLE SONGS:");
-        System.out.println("=================");
         for (int i = 0; i < allSongs.size(); i++) {
 
             Song song = allSongs.get(i);

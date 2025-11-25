@@ -15,7 +15,6 @@ public class AdminByAgathe {
 
     
     public static Admin createAccount(String name, int admin_id){
-
         return new Admin(name, admin_id);
     }
 
