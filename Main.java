@@ -61,7 +61,6 @@ class Main {
         System.out.println("Total Songs in Library: " + MusicDatabase.getTotalSongs());
         System.out.println("Total Artists: " + MusicDatabase.getTotalArtists());
         System.out.println("Registered Users: " + allUser.getUsers().size());
-        System.out.println("Admin System: Under Construction");
     }
 
     
@@ -133,8 +132,31 @@ class Main {
     }
 
 
+
     private static void createAdminAccount(String name) {
+        String contact;
+        while (true) {
+            System.out.print("Enter admin email or phone : ");
+            contact = sc.nextLine().trim();
+            if (isValidEmail(contact) || isValidPhone(contact)) break;
+            System.out.println("Please enter a valid email address or phone number");
+        }
+        
+        String password;
+        do {
+            System.out.print("Admin password (min 6 characters) : ");
+            password = sc.nextLine().trim();
+            if (password.length() < 6) {
+                System.out.println("Password must be at least 6 characters.");
+            }
+        } while (password.length() < 6);
+        
+        
         allUser.addUser(name, id, "Admin");
+        
+       
+        credentials.add(new Credential(name, id, contact, password, "Admin"));
+        
         System.out.println("Admin account created for " + name + " (ID: " + id + ")");
         id++;
     }
@@ -229,16 +251,33 @@ class Main {
     }
     
     private static void handleAdminLogin(AllUser.UserInfo userInfo) {
-        Admin admin = Admin.createAccount(userInfo.getName(), userInfo.getId());
         
-        if (admin.login(userInfo.getId())) {
-            System.out.println("Welcome, Admin " + admin.getName() + "!");
-            AdminMainMenu.displayAdminMenu(admin, sc, allUser, songCatalog); // pass registry + catalog
+        Credential adminCred = findCredentialByIdAndType(userInfo.getId(), "Admin");
+        
+        Admin admin;
+        if (adminCred != null) {
+            admin = new Admin(userInfo.getName(), userInfo.getId(), adminCred.getContact(), adminCred.getPassword());
+        
+            admin.login(userInfo.getId(), adminCred.getPassword());
         } 
-        
+
         else {
-            System.out.println("Invalid admin id.");
+            admin = new Admin(userInfo.getName(), userInfo.getId());
+            admin.login(userInfo.getId());
         }
+        
+        System.out.println("Welcome, Admin " + admin.getName());
+        AdminMainMenu.displayAdminMenu(admin, sc, allUser, MusicDatabase.getAllSongs());
+    }
+
+
+    private static Credential findCredentialByIdAndType(int id, String type) {
+        for (Credential c : credentials) {
+            if (c.getId() == id && c.getType().equals(type)) {
+                return c;
+            }
+        }
+        return null;
     }
     
     private static int getIntInput(String prompt) {

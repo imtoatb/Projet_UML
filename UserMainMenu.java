@@ -45,7 +45,7 @@ public class UserMainMenu {
                         result = user.pauseSong(currentSong);
                     } 
                     else {
-                        result = "No song is currently playing. Please play a song first.";
+                        result = "No song is currently playing";
                     }
                     break;
 
@@ -84,7 +84,7 @@ public class UserMainMenu {
 
                 
                 case 10: 
-                    System.out.print("Are you sure you want to delete your account? This action cannot be undone. (YES): ");
+                    System.out.print("Delete account ? (YES): ");
                     String confirmation = sc.nextLine();
                     if (confirmation.equals("YES")) {
                         result = user.deleteAccount();
@@ -92,12 +92,12 @@ public class UserMainMenu {
                         inUserMenu = false;
                     } 
                     else {
-                        result = "Account deletion cancelled.";
+                        result = "cancelled";
                     }
                     break;
 
                 default:
-                    result = "Invalid choice. Please try again.";
+                    result = "Invalid choice";
             }
             
         
@@ -140,7 +140,7 @@ public class UserMainMenu {
                     inVolumeMenu = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice");
             }
         }
     }
@@ -183,7 +183,7 @@ public class UserMainMenu {
     }
     
     private static void searchSongs(Scanner sc) {
-        System.out.print("Enter song name or artist to search: ");
+        System.out.print("Enter song name or artist : ");
         String query = sc.nextLine();
         
 
@@ -191,7 +191,7 @@ public class UserMainMenu {
         
 
         if (results.isEmpty()) {
-            System.out.println("No songs found matching: " + query);
+            System.out.println("No songs found");
         } 
         else {
             System.out.println("\nSEARCH RESULTS for '" + query + "':");

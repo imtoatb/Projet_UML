@@ -97,7 +97,7 @@ public class PremiumUserMainMenu {
 
                 case 9:
                     currentPlaylist = createPlaylist(pUser, sc);
-                    result = "Playlist '" + currentPlaylist.getName() + "' created successfully!";
+                    result = "Playlist '" + currentPlaylist.getName() + "' created successfully";
                     break;
 
                 case 10:
@@ -113,7 +113,7 @@ public class PremiumUserMainMenu {
                         result = pUser.playPlaylist(currentPlaylist);
                     } 
                     else {
-                        result = "No playlist available. Please create one first.";
+                        result = "No playlist";
                     }
                     break;
 
@@ -123,7 +123,7 @@ public class PremiumUserMainMenu {
                         result = pUser.shufflePlaylist(currentPlaylist);
                     } 
                     else {
-                        result = "No playlist available. Please create one first.";
+                        result = "No playlist";
                     }
                     break;
 
@@ -153,16 +153,16 @@ public class PremiumUserMainMenu {
                         inPremiumMenu = false;
                     } 
                     else {
-                        result = "Account deletion cancelled.";
+                        result = "Account deletion cancelled";
                     }
 
                     break;
 
                 default:
-                    result = "Invalid choice. Please try again.";
+                    result = "Invalid choice. Please try again";
             }
             
-            // Afficher le résultat + volume après chaque action
+            
             if (!result.isEmpty() && choice != 16) { 
                 System.out.println("\n" + result);
                 System.out.println(pUser.getVolumeDisplay());
@@ -180,7 +180,7 @@ public class PremiumUserMainMenu {
             System.out.println("2. Decrease Volume (-10%)");
             System.out.println("3. Set Specific Volume");
             System.out.println("4. Back to Main Menu");
-            System.out.print("Enter your choice: ");
+            System.out.print("Enter your choice  : ");
             
             int volumeChoice = sc.nextInt();
             sc.nextLine();
@@ -195,17 +195,17 @@ public class PremiumUserMainMenu {
                     volumeResult = pUser.decreaseVolume();
                     break;
                 case 3:
-                    System.out.print("Enter volume level (0-100): ");
+                    System.out.print("Enter volume level : ");
                     int newVolume = sc.nextInt();
                     sc.nextLine();
                     volumeResult = pUser.setVolume(newVolume);
                     break;
                 case 4:
                     inVolumeMenu = false;
-                    volumeResult = "Returning to main menu...";
+                    volumeResult = "Returning to main menu";
                     break;
                 default:
-                    volumeResult = "Invalid choice. Please try again.";
+                    volumeResult = "Invalid choice";
             }
             
                        if (!volumeResult.isEmpty()) {
@@ -237,17 +237,17 @@ public class PremiumUserMainMenu {
         if (selectedSong != null) {
             return pUser.downloadSong(selectedSong);
         }
-        return "No song selected for download.";
+        return "No song selected";
     }
     
     private static Playlist createPlaylist(PremiumUser pUser, Scanner sc) {
-        System.out.print("Enter playlist name: ");
+        System.out.print("Playlist name : ");
         String playlistName = sc.nextLine();
         
         Playlist playlist = new Playlist(playlistName, pUser.getId());
         MusicDatabase.addPlaylist(playlist);
         
-        System.out.print("Would you like to add songs to this playlist now? (yes/no): ");
+        System.out.print("Add song ? (yes/no): ");
         String response = sc.nextLine().toLowerCase();
         
         if (response.equals("yes") || response.equals("y")) {
@@ -259,24 +259,24 @@ public class PremiumUserMainMenu {
     
     private static String addSongToPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
         if (playlist == null) {
-            return "Please create a playlist first (option 9).";
+            return "Create a playlist first";
         }
         
         Song selectedSong = MusicDatabase.selectSongFromLibrary(sc);
         if (selectedSong != null) {
             String result = pUser.addToPlaylist(selectedSong, playlist);
-            return result + " Playlist now contains " + playlist.getSongCount() + " songs.";
+            return result + " Playlist contains " + playlist.getSongCount() + " songs";
         }
-        return "No song selected to add to playlist.";
+        return "No song selected";
     }
     
     private static String removeSongFromPlaylist(PremiumUser pUser, Playlist playlist, Scanner sc) {
         if (playlist == null) {
-            return "No playlist available. Please create one first.";
+            return "No playlist";
         }
         
         if (playlist.getSongCount() == 0) {
-            return "Playlist is empty. No songs to remove.";
+            return "Playlist is empty";
         }
         
         System.out.println("\nSongs in playlist '" + playlist.getName() + "':");
@@ -285,21 +285,19 @@ public class PremiumUserMainMenu {
             System.out.println((i + 1) + ". " + songs[i]);
         }
         
-        System.out.print("Select song number to remove (1-" + songs.length + "): ");
+        System.out.print("Ssong to remove (1-" + songs.length + "): ");
         String line = sc.nextLine();
-        try {
-            int choice = Integer.parseInt(line.trim());
-            
-            if (choice >= 1 && choice <= songs.length) {
-                String songName = songs[choice - 1];
-                Song songToRemove = new Song(songName, "", 0, 0);
-                return pUser.removeFromPlaylist(songToRemove, playlist);
-            } else {
-                return "Invalid selection.";
-            }
-        } catch (NumberFormatException e) {
-            return "Invalid input. Please enter a number.";
+
+        int choice = Integer.parseInt(line.trim());
+        
+        if (choice >= 1 && choice <= songs.length) {
+            String songName = songs[choice - 1];
+            Song songToRemove = new Song(songName, "", 0, 0);
+            return pUser.removeFromPlaylist(songToRemove, playlist);
+        } else {
+            return "Invalid";
         }
+
     }
     
     private static String browseAllSongs() {
@@ -314,18 +312,18 @@ public class PremiumUserMainMenu {
                 i + 1, song.name, song.artist, song.duration));
         }
         
-        result.append("\nTotal songs: ").append(allSongs.size());
+        result.append("\nTotal songs : ").append(allSongs.size());
         return result.toString();
     }
     
     private static String searchSongs(Scanner sc) {
-        System.out.print("Enter song name or artist to search: ");
+        System.out.print("Enter song name/ artist : ");
         String query = sc.nextLine();
         
         List<Song> results = MusicDatabase.searchSongs(query);
         
         if (results.isEmpty()) {
-            return "No songs found matching: " + query;
+            return "No songs found ";
         } else {
             StringBuilder result = new StringBuilder();
             result.append("\nSEARCH RESULTS for '").append(query).append("':\n");
@@ -343,7 +341,7 @@ public class PremiumUserMainMenu {
         List<Playlist> userPlaylists = pUser.getMyPlaylists();
         
         if (userPlaylists.isEmpty()) {
-            return "You don't have any playlists yet.\nUse 'Create Playlist' to make your first playlist!";
+            return "No playlist";
         }
         
         StringBuilder result = new StringBuilder();

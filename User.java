@@ -34,27 +34,27 @@ public class User {
     public String register(String name, int userId){
         this.name = name;
         this.userId = userId;
-        return "Your account has been created";
+        return "Your account created";
     }
 
    
     public String logIn(){
         if (!accountActive) {
-            return "Cannot login: This account has been deleted.";
+            return "Deleted account";
         }
         if (connected == true){
             return "You're already connected";
         }
         else{
             connected = true;
-            return "You're now on your User account";
+            return "You're on your User account";
         }
     }
 
     public String logOut(){
         if (connected == false){
 
-            return "A problem has occur, please reach the admin for more informations";
+            return "Already disconnected";
         }
         else{
             connected = false;
@@ -66,7 +66,7 @@ public class User {
 
     public String deleteAccount() {
         if (!accountActive) {
-            return "This account has already been deleted.";
+            return "This account is already deleted";
         }
         
    
@@ -81,7 +81,7 @@ public class User {
         this.volume = 50;
         this.accountActive = false;
         
-        return "Your account has been successfully deleted";
+        return "Account deleted";
     }
     
 
@@ -91,10 +91,10 @@ public class User {
     
     
  
-    
+
     public String playSong(Song song){
         if (!accountActive) {
-            return "Cannot play song: This account has been deleted";
+            return "Account deleted";
         }
 
         return song.name + " is playing";
@@ -105,16 +105,16 @@ public class User {
             return "Cannot pause song: This account has been deleted";
         }
 
-        return song.name + " has been paused at " + song.playingtime;
+        return song.name + " has been paused";
     }
 
     
     public String nextSong() {
         if (!accountActive) {
-            return "Cannot play next song: This account has been deleted";
+            return "Account deleted";
         }
         if (currentSongList == null || currentSongList.isEmpty()) {
-            return "No songs available in the library\nPlease play a song first";
+            return "No songs available ";
         }
         
         currentSongIndex = (currentSongIndex + 1) % currentSongList.size();
@@ -126,10 +126,10 @@ public class User {
 
     public String previousSong() {
         if (!accountActive) {
-            return "Cannot play previous song: This account has been deleted";
+            return "Account deleted";
         }
         if (currentSongList == null || currentSongList.isEmpty()) {
-            return "No songs available in the library\n Please play a song first";
+            return "No songs available in the library";
         }
         
         currentSongIndex = (currentSongIndex - 1 + currentSongList.size()) % currentSongList.size();
@@ -141,7 +141,7 @@ public class User {
     
     public String getCurrentSong() {
         if (!accountActive) {
-            return "Cannot get current song: This account has been deleted";
+            return "Account deleted";
         }
         
         if (currentSongList == null || currentSongList.isEmpty()) {
@@ -152,10 +152,10 @@ public class User {
         return "Now Playing: " + currentSong.name + " - " + currentSong.artist + " (" + currentSong.duration + "s)";
     }
 
-    //For Volume
+
     public String increaseVolume() {
         if (!accountActive) {
-            return "Cannot adjust volume: This account has been deleted.";
+            return "Account deleted";
         }
         if (volume < 100) {
             
@@ -165,13 +165,13 @@ public class User {
         } 
         
         else {
-            return displayVolume() + " (Volume maximum atteint!)";
+            return displayVolume() + " (Volume max)";
         }
     }
     
     public String decreaseVolume() {
         if (!accountActive) {
-            return "Cannot adjust volume: This account has been deleted.";
+            return "Account deleted";
         }
         if (volume > 0) {
             volume -= 10;
@@ -179,13 +179,13 @@ public class User {
             return displayVolume();
         } 
         else {
-            return displayVolume() + " (Volume minimum atteint!)";
+            return displayVolume() + " (Volume min)";
         }
     }
     
     public String setVolume(int newVolume) {
         if (!accountActive) {
-            return "Cannot adjust volume: This account has been deleted.";
+            return "Account deleted";
         }
         if (newVolume >= 0 && newVolume <= 100) {
             volume = newVolume;
@@ -198,7 +198,7 @@ public class User {
 
     public String displayVolume() {
         if (!accountActive) {
-            return "Volume: Account deleted";
+            return "Account deleted";
         }
         
         System.out.println('\n');
@@ -226,7 +226,7 @@ public class User {
     
     public String getVolumeDisplay() {
         if (!accountActive) {
-            return "Volume: Account deleted";
+            return "Account deleted";
         }
         return displayVolume();
     }

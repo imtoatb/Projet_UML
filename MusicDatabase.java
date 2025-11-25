@@ -138,7 +138,7 @@ public class MusicDatabase {
         List<Song> allSongs = getAllSongs();
         
         if (allSongs.isEmpty()) {
-            System.out.println("No songs available in the library");
+            System.out.println("No songs available");
             return null;
         }
         
@@ -152,25 +152,19 @@ public class MusicDatabase {
 
 
         System.out.print("Select a song (1-" + allSongs.size() + "): ");
-        try {
-            int choice = sc.nextInt();
-            sc.nextLine();                                                      //for the buffer
-            
-            if (choice >= 1 && choice <= allSongs.size()) {
-                Song selectedSong = allSongs.get(choice - 1);
-                System.out.println("Selected : " + selectedSong.name + " - " + selectedSong.artist);
-                return selectedSong;
-            } else {
-                System.out.println("Invalid selection. Please try again");
-                return null;
-            }
-
-        } 
+    
+        int choice = sc.nextInt();
+        sc.nextLine();                                                      //for the buffer
         
-        catch (Exception e) {
-            System.out.println("Invalid input, Please enter a number");
-            sc.nextLine(); 
+        if (choice >= 1 && choice <= allSongs.size()) {
+            Song selectedSong = allSongs.get(choice - 1);
+            System.out.println("Selected : " + selectedSong.name + " - " + selectedSong.artist);
+            return selectedSong;
+        } else {
+            System.out.println("Invalid selection");
             return null;
         }
+
+
     }
 }

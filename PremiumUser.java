@@ -20,7 +20,7 @@ public class PremiumUser extends User {
         }    
         else{
             connected = true;
-            return "You're now on your Premium User account";
+            return "You're on your Premium User account";
         }
     }
 
@@ -57,7 +57,7 @@ public class PremiumUser extends User {
     public String deletePlaylist(String playlistName){
         boolean deleted = MusicDatabase.deletePlaylist(playlistName, this.getId());
         if (deleted) {
-            return "Playlist '" + playlistName + "' has been deleted";
+            return "Playlist '" + playlistName + "'  deleted";
         } 
         else {
             return "Playlist '" + playlistName + "' not found";
@@ -71,7 +71,7 @@ public class PremiumUser extends User {
 
 
     public String downloadSong(Song song){
-        return "'" + song.name + "' has been downloaded";
+        return "'" + song.name + "' downloaded";
     }
 
 
@@ -79,7 +79,7 @@ public class PremiumUser extends User {
 
     public String toggleShuffle(List<Song> songList) {
         if (songList == null || songList.isEmpty()) {
-            return "No songs available to shuffle.";
+            return "No songs available";
         }
         
         if (!shuffleMode) {
@@ -88,14 +88,14 @@ public class PremiumUser extends User {
             shuffleMode = true;
             setCurrentSongList(shuffledPlaylist);
             resetSongIndex(0);
-            return "Shuffle mode activated! Playlist has been shuffled.";
+            return "Shuffle mode activated";
         } 
         
         else {
             shuffleMode = false;
             shuffledPlaylist = null;
             setCurrentSongList(songList);
-            return "Shuffle mode deactivated. Returning to normal order.";
+            return "Shuffle mode deactivated";
         }
     }
     
@@ -107,7 +107,7 @@ public class PremiumUser extends User {
         if (shuffleMode && shuffledPlaylist != null) {
             currentSongIndex = (currentSongIndex + 1) % shuffledPlaylist.size();
             Song nextSong = shuffledPlaylist.get(currentSongIndex);
-            return "SHUFFLE - Next: " + nextSong.name + " - " + nextSong.artist + " is now playing";
+            return "SHUFFLE - Next: " + nextSong.name + " - " + nextSong.artist + " is playing";
         } 
         else {
             return super.nextSong();
@@ -120,7 +120,7 @@ public class PremiumUser extends User {
         if (shuffleMode && shuffledPlaylist != null) {
             currentSongIndex = (currentSongIndex - 1 + shuffledPlaylist.size()) % shuffledPlaylist.size();
             Song previousSong = shuffledPlaylist.get(currentSongIndex);
-            return "SHUFFLE - Previous: " + previousSong.name + " - " + previousSong.artist + " is now playing";
+            return "SHUFFLE - Previous: " + previousSong.name + " - " + previousSong.artist + " is playing";
         } 
         else {
             return super.previousSong();
@@ -151,7 +151,7 @@ public class PremiumUser extends User {
         }
         
         if (playlist.getSongCount() == 0) {
-            return "Empty playlist cannot be shuffle.";
+            return "Empty playlist";
         }
         
 
@@ -167,7 +167,7 @@ public class PremiumUser extends User {
         }
         
         if (playlistSongs.isEmpty()) {
-            return "No valid songs found in the playlist";
+            return "No valid songs found";
         }
         
         Collections.shuffle(playlistSongs, random);

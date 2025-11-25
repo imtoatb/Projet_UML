@@ -36,7 +36,7 @@ public class Playlist {
         for (int i = 0; i < songCount; i++) {                                //songs (tab) -> the playlist 
             String song = songs[i]; 
             if (song.equals(songName)) {
-                System.out.println("Song '" + songName + "' is already in the playlist.");
+                System.out.println("Song '" + songName + "' is already in the playlist");
                 return;
             }
         }
@@ -93,7 +93,7 @@ public class Playlist {
   
     public void displaySongs() {
         if (songCount == 0) {
-            System.out.println("Playlist '" + name + "' is empty.");
+            System.out.println("Playlist '" + name + "' is empty");
             return;
         }
         
@@ -126,7 +126,7 @@ public class Playlist {
    
     @Override
     public String toString() {
-        return "Playlist: " + name + " (" + songCount + " songs)";
+        return "Playlist : " + name + " (" + songCount + " songs)";
     }
     
  
