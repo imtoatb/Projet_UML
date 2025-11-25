@@ -1,5 +1,5 @@
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class PremiumUserMainMenu {
     
@@ -317,7 +317,7 @@ public class PremiumUserMainMenu {
     }
     
     private static String searchSongs(Scanner sc) {
-        System.out.print("Enter song name/ artist : ");
+        System.out.print("Enter song name/ artist to search: ");
         String query = sc.nextLine();
         
         List<Song> results = MusicDatabase.searchSongs(query);

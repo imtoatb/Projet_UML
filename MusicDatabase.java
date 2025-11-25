@@ -152,18 +152,18 @@ public class MusicDatabase {
 
 
         System.out.print("Select a song (1-" + allSongs.size() + "): ");
-    
-        int choice = sc.nextInt();
-        sc.nextLine();                                                      //for the buffer
         
-        if (choice >= 1 && choice <= allSongs.size()) {
-            Song selectedSong = allSongs.get(choice - 1);
-            System.out.println("Selected : " + selectedSong.name + " - " + selectedSong.artist);
-            return selectedSong;
-        } else {
-            System.out.println("Invalid selection");
-            return null;
-        }
+            int choice = sc.nextInt();
+            sc.nextLine();                                                      //for the buffer
+            
+            if (choice >= 1 && choice <= allSongs.size()) {
+                Song selectedSong = allSongs.get(choice - 1);
+                System.out.println("Selected : " + selectedSong.name + " - " + selectedSong.artist);
+                return selectedSong;
+            } else {
+                System.out.println("Invalid selection");
+                return null;
+            }
 
 
     }
