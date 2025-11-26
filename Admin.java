@@ -5,12 +5,14 @@ public class Admin {
     private boolean connected;
     private Credential credentials; 
 
+    /* 
     public Admin(String name, int admin_id){
         this.name = name;
         this.admin_id = admin_id;
         this.connected = false;
         this.credentials = null; 
     }
+    */
 
     public Admin(String name, int admin_id, String contact, String password){
         this.name = name;
@@ -57,7 +59,7 @@ public class Admin {
         return this.connected;
     }
 
-   
+   /*
     public boolean login(int providedId){
         if (this.credentials != null) {
             System.out.println("This admin requires password authentication. Use login(id, password) instead");
@@ -72,6 +74,7 @@ public class Admin {
         }
         return ok;
     }
+    */
 
     public void logout(){
         if (this.connected) {

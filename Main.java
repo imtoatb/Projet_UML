@@ -259,14 +259,15 @@ class Main {
             admin = new Admin(userInfo.getName(), userInfo.getId(), adminCred.getContact(), adminCred.getPassword());
         
             admin.login(userInfo.getId(), adminCred.getPassword());
+            System.out.println("Welcome, Admin " + admin.getName());
         } 
 
         else {
-            admin = new Admin(userInfo.getName(), userInfo.getId());
-            admin.login(userInfo.getId());
+            admin = new Admin(userInfo.getName(), userInfo.getId(), "admin@system.com", "admin123");
+            admin.login(userInfo.getId(), "admin123");
+            System.out.println("Welcome, Admin " + admin.getName() + " (default password: admin123)"); 
+       
         }
-        
-        System.out.println("Welcome, Admin " + admin.getName());
         AdminMainMenu.displayAdminMenu(admin, sc, allUser, MusicDatabase.getAllSongs());
     }
 
@@ -298,7 +299,7 @@ class Main {
     }
 
 
-    
+
 
 
 
