@@ -25,7 +25,7 @@ public class AdminByAgathe {
         boolean ok = (this.admin_id == providedId);
         this.connected = ok;
         if (ok) {
-            System.out.println("Admin " + name + " logged in successfully");
+            System.out.println("Admin " + name + " logged in ");
         } else {
             System.out.println("Invalid admin ID");
         }
@@ -45,29 +45,29 @@ public class AdminByAgathe {
         this.name = null;
         this.admin_id = 0;
         this.connected = false;
-        return "Admin account '" + deletedName + "' has been deleted";
+        return "Admin account '" + deletedName + "'deleted";
     }
 
 
 
     
     public PremiumUser upgradeToPremium(User u){
-        if (!connected) throw new IllegalStateException("Admin must be logged in to manage users.");
+        if (!connected) throw new IllegalStateException("Admin must be log in");
         if (u == null) throw new IllegalArgumentException("User cannot be null.");
-        if (!u.isAccountActive()) throw new IllegalArgumentException("Cannot upgrade deleted user account.");
+        if (!u.isAccountActive()) throw new IllegalArgumentException("Cannot upgrade deleted account");
         
-        System.out.println("Upgrading user " + u.getName() + " to Premium User");
+        System.out.println("Upgrading user " + u.getName() + " to premium user");
         return new PremiumUser(u.getName(), u.getId());
 
     }
 
 
     public User downgradeToFree(PremiumUser p){
-        if (!connected) throw new IllegalStateException("Admin must be logged in to manage users.");
+        if (!connected) throw new IllegalStateException("Admin must be log in");
         if (p == null) throw new IllegalArgumentException("PremiumUser cannot be null.");
-        if (!p.isAccountActive()) throw new IllegalArgumentException("Cannot downgrade deleted user account.");
+        if (!p.isAccountActive()) throw new IllegalArgumentException("Cannot downgrade");
         
-        System.out.println("Downgrading premium user " + p.getName() + " to User");
+        System.out.println("Downgrading premium user " + p.getName() + " to user");
         return new User(p.getName(), p.getId());
     }
 
@@ -76,21 +76,21 @@ public class AdminByAgathe {
 
 
     public String deleteUserAccount(AllUser allUser, String userName, int userId) {
-        if (!connected) return "Admin must be logged in to manage users.";
+        if (!connected) return "Admin must be logged";
         
         for (int i = 0; i < allUser.getUsers().size(); i++) {
             AllUser.UserInfo user = allUser.getUsers().get(i);
             if (user.getName().equals(userName) && user.getId() == userId) {
                 if ("Admin".equals(user.getAccountType())) {
-                    return "Cannot delete another admin account";
+                    return "Cannot delete";
                 }
                 
                 user.deleteAccount();
-                return "User account " + userName + " (ID: " + userId + ") has been deleted";
+                return "User  " + userName + " (ID: " + userId + ") deleted";
             
             }
         }
-        return "User account not found";
+        return "User Not found";
     }
 
 
@@ -104,21 +104,21 @@ public class AdminByAgathe {
         for (int i = 0; i < songCatalog.size(); i++) {
             Song s = songCatalog.get(i);
             if (s.name.equalsIgnoreCase(song.name) && s.artist.equalsIgnoreCase(song.artist)) {
-                return "Song '" + song.name + "' by " + song.artist + " already exists in catalog.";
+                return "Song '" + song.name + "' by " + song.artist + " already exists";
             }
         }
         
         songCatalog.add(song);
-        return "Song '" + song.name + "' by " + song.artist + " has been added to music library.";
+        return "Song '" + song.name + "' by " + song.artist + " added";
     }
 
 
     public String deleteSong(Song song, List<Song> songCatalog){
         boolean removed = songCatalog.remove(song);
         if (removed) {
-            return "Song '" + song.name + "' by " + song.artist + " has been deleted from music library.";
+            return "Song '" + song.name + "' by " + song.artist + " deleted";
         } else {
-            return "Song '" + song.name + "' not found in catalog.";
+            return "Song '" + song.name + "' not found";
         }
     }
 
@@ -148,7 +148,7 @@ public class AdminByAgathe {
         if (changed) {
             return "Song updated";
         } else {
-            return "No changes made to the song.";
+            return "No changes made";
         }
     }
 

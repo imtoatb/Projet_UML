@@ -60,7 +60,7 @@ public class Admin {
    
     public boolean login(int providedId){
         if (this.credentials != null) {
-            System.out.println("This admin requires password authentication. Use login(id, password) instead.");
+            System.out.println("This admin requires password authentication. Use login(id, password) instead");
             return false;
         }
         boolean ok = (this.admin_id == providedId);
@@ -89,7 +89,7 @@ public class Admin {
         this.admin_id = 0;
         this.connected = false;
         this.credentials = null;
-        return "Admin account '" + deletedName + "' has been deleted";
+        return "Admin account '" + deletedName + "' deleted";
     }
 
     
@@ -106,7 +106,7 @@ public class Admin {
 
     public boolean updatePassword(String oldPassword, String newPassword) {
         if (this.credentials == null) {
-            System.out.println("No credentials yet");
+            System.out.println("No credentials");
             return false;
         }
         if (!this.credentials.getPassword().equals(oldPassword)) {
@@ -119,7 +119,7 @@ public class Admin {
         }
         
         this.credentials = new Credential(this.name, this.admin_id, this.credentials.getContact(), newPassword, "Admin");
-        System.out.println("Password updated " + this.name);
+        System.out.println("Password updated ");
         return true;
     }
 
@@ -129,7 +129,7 @@ public class Admin {
             return false;
         }
         if (newContact == null || newContact.trim().isEmpty()) {
-            System.out.println("Contact can't be empty.");
+            System.out.println("Contact can't be empty");
             return false;
         }
         
